@@ -12,7 +12,7 @@ def test_on_notification_no_keyword(mocker):
     mastodon_mock = Mock(spec=Mastodon)
     mocker.patch('masto_search_bot.Mastodon', return_value=mastodon_mock)
 
-    from masto_search_bot import Listener
+    from splatoon_schedule_bot import Listener
 
     # Test with a mention that does not contain [ ] keywords
     notification = {
@@ -42,7 +42,7 @@ def test_on_notification_with_keyword(mocker):
     mastodon_mock = Mock(spec=Mastodon)
     mocker.patch('masto_search_bot.Mastodon', return_value=mastodon_mock)
 
-    from masto_search_bot import Listener
+    from splatoon_schedule_bot import Listener
 
     # Test with a mention that contains [ ] keyword
     notification = {

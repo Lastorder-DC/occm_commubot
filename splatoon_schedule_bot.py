@@ -2,14 +2,15 @@
 # -*- coding: utf-8 -*-
 import re
 import os
-import requests
-import json
+from time import sleep
 from mastodon import Mastodon
 from mastodon.streaming import StreamListener
 from google.oauth2 import service_account
 import gspread
+import schedule
 from pyjosa.josa import Josa
 from dotenv import load_dotenv
+from splatoon3 import get_schedules
 load_dotenv()
 
 # 구글시트 세팅
@@ -26,6 +27,8 @@ search = sh.worksheet(os.getenv('MAIN_SHEET_NAME'))
 default_visibility = os.getenv('MASTODON_DEFAULT_VISIBILITY')
 admin_handle = os.getenv('BOT_ADMIN_HANDLE')
 tag_admin = os.getenv('BOT_TAG_ADMIN') == 'true'
+locale = os.getenv('BOT_LOCALE')
+cur_schedule = get_schedules(locale)
 
 BASE = os.getenv('MASTODON_BASE')
 
@@ -38,6 +41,32 @@ m = Mastodon(
 bot = m.me()
 
 print(f"성공적으로 계정 {bot.username}으로 로그인 되었습니다.")
+
+def detect_schedule_change():
+    global cur_schedule
+    new_schedule = get_schedules(locale)
+
+    if cur_schedule != new_schedule:
+        cur_schedule = new_schedule
+        m.status_post(f"""스케쥴이 변경되었습니다.
+
+현재 영역배틀
+맵 : {', '.join(cur_schedule['regular']['stages'])}
+규칙 : {cur_schedule['regular']['rule']}
+
+현재 카오폴리스 매치 챌린지
+맵 : {', '.join(cur_schedule['challenge']['stages'])}
+규칙 : {cur_schedule['challenge']['rule']}
+
+현재 카오폴리스 매치 오픈
+맵 : {', '.join(cur_schedule['open']['stages'])}
+규칙 : {cur_schedule['open']['rule']}
+
+현재 X 매치
+맵 : {', '.join(cur_schedule['xmatch']['stages'])}
+규칙 : {cur_schedule['xmatch']['rule']}""", visibility=default_visibility)
+
+schedule.every(10).seconds.do(detect_schedule_change)
 
 CLEANR = re.compile('<.*?>')
 SEC_CLEANR = re.compile('\B@\w+')
@@ -106,46 +135,27 @@ class Listener(StreamListener):
                 look = search.find(keyword, in_column=1, case_sensitive=True).row
                 result = search.get(f"R{look}C2:R{look}C5", value_render_option="UNFORMATTED_VALUE")[0]
 
-                # 정산 요청 감지시(기본 문구를 %정산%으로 입력)
-                if result[0] == "%정산%":
-                    print(f"유저 {notification['status']['account']['acct']}의 정산 요청 감지")
-                    letters = 0
-                    URL = f"{BASE}/api/v1/accounts/{notification['status']['account']['id']}/statuses"
-                    bf_last = None
-
-                    while True:
-                        params = {
-                            'limit': 40
-                        }
-
-                        fetched = requests.get(URL, params=params,timeout=60)
-                        fetched = json.loads(fetched.text)
-
-                        if len(fetched) == 0:
-                            break
-
-                        for i in fetched:
-                            i = gettext(i['content'])
-                            letters += len(i)
-
-                        try:
-                            last = fetched[-1]
-                            max_id = last['id']
-                            last = last['created_at']
-
-                            if bf_last is None:
-                                bf_last = last
-
-                            else:
-                                if bf_last <= last:
-                                    print('끝에 도달했습니다')
-                                    break
-                        except IndexError:
-                            print('끝에 도달했습니다')
-                            break
-                        params['max_id'] = max_id
+                # 현재 스케쥴 요청
+                if result[0] == "%스케쥴%":
+                    schedules = get_schedules(locale)
                     
-                    m.status_post(f"@{notification['status']['account']['acct']} 활동이 정산되었습니다. 현재까지 작성한 글자수는 공미포 {letters}자입니다.", in_reply_to_id=notification['status']['id'], visibility=default_visibility)
+                    m.status_post(f"""@{notification['status']['account']['acct']} 현재 스케쥴 정보
+
+현재 영역배틀
+맵 : {', '.join(schedules['regular']['stages'])}
+규칙 : {schedules['regular']['rule']}
+
+현재 카오폴리스 매치 챌린지
+맵 : {', '.join(schedules['challenge']['stages'])}
+규칙 : {schedules['challenge']['rule']}
+
+현재 카오폴리스 매치 오픈
+맵 : {', '.join(schedules['open']['stages'])}
+규칙 : {schedules['open']['rule']}
+
+현재 X 매치
+맵 : {', '.join(schedules['xmatch']['stages'])}
+규칙 : {schedules['xmatch']['rule']}""", in_reply_to_id=notification['status']['id'], visibility=default_visibility)
                 else:
                     # 조사 선택지인 경우
                     if result[1] is True:
@@ -180,7 +190,10 @@ def main():
     """
     메인 함수로, Mastodon 스트리밍을 시작합니다.
     """
-    m.stream_user(Listener())
+    m.stream_user(Listener(), run_async=True, reconnect_async=True, reconnect_async_wait_sec=10)
+    while True:
+        schedule.run_pending()
+        sleep(1)
 
 if __name__ == '__main__':
     main()

@@ -69,6 +69,10 @@ def get_rules_name(data, rule_id):
     return rule_name
 
 def get_schedules(locale):
+    headers = {
+        'User-Agent': 'DeepCutRadio_Splat00n_ink/1.0',
+        'From': 'radio@splat00n.ink'  # This is another valid field
+    }
     last_schedules_refresh_time = get_last_modified_time(SCHEDULES_DB_FILE)
     last_locale_refresh_time = get_last_modified_time(LOCALE_DB_TEMPLATE.format("ko-KR"))
 
@@ -77,7 +81,7 @@ def get_schedules(locale):
     
     if should_refresh_data(last_schedules_refresh_time, refresh_interval):
         schedules_url = "https://splatoon3.ink/data/schedules.json"
-        response = requests.get(schedules_url, timeout=120)
+        response = requests.get(schedules_url, timeout=120, headers=headers)
         schedules_db = response.json()
         save_data_to_file(SCHEDULES_DB_FILE, schedules_db)
         last_schedules_refresh_time = datetime.utcnow()
@@ -87,7 +91,7 @@ def get_schedules(locale):
 
     if should_refresh_data(last_locale_refresh_time, refresh_interval):
         locale_url = f"https://splatoon3.ink/data/locale/{locale}.json"
-        response = requests.get(locale_url, timeout=120)
+        response = requests.get(locale_url, timeout=120, headers=headers)
         locale_db = response.json()
         save_data_to_file(locale_db_file, locale_db)
         last_locale_refresh_time = datetime.utcnow()

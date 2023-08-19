@@ -29,6 +29,7 @@ admin_handle = os.getenv('BOT_ADMIN_HANDLE')
 tag_admin = os.getenv('BOT_TAG_ADMIN') == 'true'
 locale = os.getenv('BOT_LOCALE')
 cur_schedule = get_schedules(locale)
+cur_salmon = cur_schedule["salmon"]
 
 BASE = os.getenv('MASTODON_BASE')
 
@@ -44,6 +45,7 @@ print(f"성공적으로 계정 {bot.username}으로 로그인 되었습니다.")
 
 def detect_schedule_change():
     global cur_schedule
+    global cur_salmon
     new_schedule = get_schedules(locale)
 
     if cur_schedule != new_schedule:
@@ -65,6 +67,13 @@ def detect_schedule_change():
 현재 X 매치
 맵 : {', '.join(cur_schedule['xmatch']['stages'])}
 규칙 : {cur_schedule['xmatch']['rule']}""", visibility=default_visibility)
+        
+        if cur_salmon != new_schedule["salmon"]:
+            cur_salmon = new_schedule["salmon"]
+            m.status_post(f"""연어런 스케쥴 변경!
+
+맵 : {''.join(cur_salmon['stages'])}
+무기 : {', '.join(cur_salmon['weapons'])}""", visibility=default_visibility)
 
 schedule.every(10).seconds.do(detect_schedule_change)
 

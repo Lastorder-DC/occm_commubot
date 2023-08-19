@@ -54,6 +54,10 @@ def extract_info(schedule, locale_db, type="OPEN"):
         vs_stages = [get_stage_name(locale_db, stage["id"]) for stage in schedule["xMatchSetting"]["vsStages"]]
         vs_images = [stage["image"]["url"] for stage in schedule["xMatchSetting"]["vsStages"]]
         vs_rule = get_rules_name(locale_db, schedule["xMatchSetting"]["vsRule"]["id"])
+    if schedule and "setting" in schedule:
+        vs_stages = [get_stage_name(locale_db, schedule["setting"]["coopStage"]["id"]), ]
+        vs_images = [schedule["setting"]["coopStage"]["image"]["url"], ]
+        vs_rule = [get_weapon_name(locale_db, weapon["__splatoon3ink_id"]) for weapon in schedule["setting"]["weapons"]]
     return vs_stages, vs_images, vs_rule
 
 def get_stage_name(data, stage_id):
@@ -67,6 +71,12 @@ def get_rules_name(data, rule_id):
     rule_info = rules_data.get(rule_id, {})
     rule_name = rule_info.get("name", None)
     return rule_name
+
+def get_weapon_name(data, weapons_id):
+    weapons_data = data.get("weapons", {})
+    weapon_info = weapons_data.get(weapons_id, {})
+    weapon_name = weapon_info.get("name", None)
+    return weapon_name
 
 def get_schedules(locale):
     headers = {
@@ -120,11 +130,19 @@ def get_schedules(locale):
             current_x_schedule = schedule
             break
 
+    # 현재 시간에 해당하는 salmonSchedule 찾기
+    current_salmon_schedule = None
+    for schedule in schedules_db["data"]["coopGroupingSchedule"]["regularSchedules"]["nodes"]:
+        if convert_time(schedule["startTime"]) <= current_time < convert_time(schedule["endTime"]):
+            current_salmon_schedule = schedule
+            break
+    
     # 결과 출력
     regular_vs_stages, regular_vs_images, regular_vs_rule = extract_info(current_regular_schedule, locale_db)
     bankara_challenge_vs_stages, bankara_challenge_vs_images, bankara_challenge_vs_rule  = extract_info(current_bankara_schedule, locale_db, "CHALLENGE")
     bankara_open_vs_stages, bankara_open_vs_images, bankara_open_vs_rule  = extract_info(current_bankara_schedule, locale_db, "OPEN")
     x_vs_stages, x_vs_images, x_vs_rule = extract_info(current_x_schedule, locale_db)
+    salmon_stages, salmon_images, salmon_weapons = extract_info(current_salmon_schedule, locale_db)
 
     return {
         "regular": {
@@ -146,6 +164,11 @@ def get_schedules(locale):
             "stages": x_vs_stages,
             "images": x_vs_images,
             "rule": x_vs_rule
+        },
+        "salmon": {
+            "stages": salmon_stages,
+            "images": salmon_images,
+            "weapons": salmon_weapons
         }
     }
 

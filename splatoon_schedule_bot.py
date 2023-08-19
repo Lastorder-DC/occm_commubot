@@ -164,7 +164,11 @@ class Listener(StreamListener):
 
 현재 X 매치
 맵 : {', '.join(schedules['xmatch']['stages'])}
-규칙 : {schedules['xmatch']['rule']}""", in_reply_to_id=notification['status']['id'], visibility=default_visibility)
+규칙 : {schedules['xmatch']['rule']}
+
+현재 연어런
+맵 : {''.join(schedules["salmon"]['stages'])}
+무기 : {', '.join(schedules["salmon"]['weapons'])}""", in_reply_to_id=notification['status']['id'], visibility=default_visibility)
                 else:
                     # 조사 선택지인 경우
                     if result[1] is True:

@@ -57,7 +57,7 @@ def extract_info(schedule, locale_db, type="OPEN"):
     if schedule and "setting" in schedule:
         vs_stages = [get_stage_name(locale_db, schedule["setting"]["coopStage"]["id"]), ]
         vs_images = [schedule["setting"]["coopStage"]["image"]["url"], ]
-        vs_rule = [get_weapon_name(locale_db, weapon["__splatoon3ink_id"]) for weapon in schedule["setting"]["weapons"]]
+        vs_rule = [f":WPN_{get_image_id(weapon['image']['url'])}: {get_weapon_name(locale_db, weapon['__splatoon3ink_id'])}" for weapon in schedule["setting"]["weapons"]]
     return vs_stages, vs_images, vs_rule
 
 def get_stage_name(data, stage_id):
@@ -77,6 +77,13 @@ def get_weapon_name(data, weapons_id):
     weapon_info = weapons_data.get(weapons_id, {})
     weapon_name = weapon_info.get("name", None)
     return weapon_name
+
+def get_image_id(url):
+    url_parts = url.split('/')
+    file_name_with_extension = url_parts[-1]
+    id, _ = os.path.splitext(file_name_with_extension)
+
+    return id
 
 def get_schedules(locale):
     headers = {

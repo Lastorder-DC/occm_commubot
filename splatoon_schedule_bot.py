@@ -53,7 +53,7 @@ def detect_schedule_change():
 
     if cur_schedule != new_schedule:
         cur_schedule = new_schedule
-        m.status_post(f"""스케쥴이 변경되었습니다.
+        m.status_post(f"""스케쥴이 업데이트되었습니다.
 {cur_schedule['regular']['time']['start']} ~ {cur_schedule['regular']['time']['end']}
 
 현재 영역배틀

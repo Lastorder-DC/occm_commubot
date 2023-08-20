@@ -31,6 +31,7 @@ locale = os.getenv('BOT_LOCALE')
 cur_schedule = get_schedules(locale)
 cur_salmon = cur_schedule["salmon"]
 cur_event = None
+cur_schedule = None
 
 BASE = os.getenv('MASTODON_BASE')
 

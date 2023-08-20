@@ -84,10 +84,11 @@ def detect_schedule_change():
         event_name = cur_event['type']['name']
         event_regulation = cur_event['type']['regulation'].replace('<br />', '\n')
         m.status_post(f"""이벤트 매치 진행중!
+{cur_event['time']['start']} ~ {cur_event['time']['end']}
 
 {event_name}
 {event_regulation}
-{cur_event['time']['start']} ~ {cur_event['time']['end']}
+
 
 맵 : {''.join(cur_event['stages'])}
 규칙 : {cur_event['rule']}""", visibility=default_visibility)

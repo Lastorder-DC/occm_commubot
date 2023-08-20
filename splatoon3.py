@@ -222,7 +222,7 @@ def get_schedules(locale):
             "type": event_rule["type"],
             "stages": event_stages,
             "images": event_images,
-            "rules": event_rule["rules"],
+            "rule": event_rule["rules"],
             "time": event_time
         }
 

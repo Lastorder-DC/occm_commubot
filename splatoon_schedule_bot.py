@@ -30,6 +30,7 @@ tag_admin = os.getenv('BOT_TAG_ADMIN') == 'true'
 locale = os.getenv('BOT_LOCALE')
 cur_schedule = get_schedules(locale)
 cur_salmon = cur_schedule["salmon"]
+cur_event = None
 
 BASE = os.getenv('MASTODON_BASE')
 
@@ -46,11 +47,13 @@ print(f"성공적으로 계정 {bot.username}으로 로그인 되었습니다.")
 def detect_schedule_change():
     global cur_schedule
     global cur_salmon
+    global cur_event
     new_schedule = get_schedules(locale)
 
     if cur_schedule != new_schedule:
         cur_schedule = new_schedule
         m.status_post(f"""스케쥴이 변경되었습니다.
+{cur_schedule['regular']['time']['start']} ~ {cur_schedule['regular']['time']['end']}
 
 현재 영역배틀
 맵 : {', '.join(cur_schedule['regular']['stages'])}
@@ -71,9 +74,25 @@ def detect_schedule_change():
         if cur_salmon != new_schedule["salmon"]:
             cur_salmon = new_schedule["salmon"]
             m.status_post(f"""연어런 스케쥴 변경!
+{cur_salmon['time']['start']} ~ {cur_salmon['time']['end']}
 
 맵 : {''.join(cur_salmon['stages'])}
 무기 : {', '.join(cur_salmon['weapons'])}""", visibility=default_visibility)
+        
+        if cur_event != new_schedule["event"]:
+            cur_event = new_schedule["event"]
+            event_name = cur_event['type']['name']
+            event_desc = cur_event['type']['desc']
+            event_regulation = cur_event['type']['regulation'].replace('<br />', '\n')
+            m.status_post(f"""이벤트 매치 진행중!
+{event_name}
+{event_desc}
+
+{event_regulation}
+{cur_event['time']['start']} ~ {cur_event['time']['end']}
+
+맵 : {''.join(cur_event['stages'])}
+규칙 : {cur_event['rule']}""", visibility=default_visibility)
 
 schedule.every(10).seconds.do(detect_schedule_change)
 

@@ -82,17 +82,16 @@ def detect_schedule_change():
     if cur_event != new_schedule["event"]:
         cur_event = new_schedule["event"]
         event_name = cur_event['type']['name']
-        event_desc = cur_event['type']['desc']
         event_regulation = cur_event['type']['regulation'].replace('<br />', '\n')
-        m.status_post(f"""이벤트 매치 진행중!
-{event_name}
-{event_desc}
+        m.status_post(f"""## 이벤트 매치 진행중!
+
+### {event_name}
 
 {event_regulation}
 {cur_event['time']['start']} ~ {cur_event['time']['end']}
 
 맵 : {''.join(cur_event['stages'])}
-규칙 : {cur_event['rule']}""", visibility=default_visibility)
+규칙 : {cur_event['rule']}""", visibility=default_visibility, content_type="text/markdown")
 
 schedule.every(10).seconds.do(detect_schedule_change)
 

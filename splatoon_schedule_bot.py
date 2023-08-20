@@ -79,12 +79,12 @@ def detect_schedule_change():
 맵 : {''.join(cur_salmon['stages'])}
 무기 : {', '.join(cur_salmon['weapons'])}""", visibility=default_visibility)
         
-        if cur_event != new_schedule["event"]:
-            cur_event = new_schedule["event"]
-            event_name = cur_event['type']['name']
-            event_desc = cur_event['type']['desc']
-            event_regulation = cur_event['type']['regulation'].replace('<br />', '\n')
-            m.status_post(f"""이벤트 매치 진행중!
+    if cur_event != new_schedule["event"]:
+        cur_event = new_schedule["event"]
+        event_name = cur_event['type']['name']
+        event_desc = cur_event['type']['desc']
+        event_regulation = cur_event['type']['regulation'].replace('<br />', '\n')
+        m.status_post(f"""이벤트 매치 진행중!
 {event_name}
 {event_desc}
 

@@ -153,6 +153,7 @@ def get_schedules(locale):
 
     # 현재 시간에 해당하는 regularSchedules 찾기
     current_regular_schedule = None
+    regular_vs_time = None
     for schedule in schedules_db["data"]["regularSchedules"]["nodes"]:
         if convert_time(schedule["startTime"]) <= current_time < convert_time(schedule["endTime"]):
             current_regular_schedule = schedule
@@ -164,6 +165,7 @@ def get_schedules(locale):
 
     # 현재 시간에 해당하는 bankaraSchedules 찾기
     current_bankara_schedule = None
+    bankara_open_vs_time = None
     for schedule in schedules_db["data"]["bankaraSchedules"]["nodes"]:
         if convert_time(schedule["startTime"]) <= current_time < convert_time(schedule["endTime"]):
             current_bankara_schedule = schedule
@@ -176,6 +178,7 @@ def get_schedules(locale):
 
     # 현재 시간에 해당하는 xSchedules 찾기
     current_x_schedule = None
+    x_vs_time = None
     for schedule in schedules_db["data"]["xSchedules"]["nodes"]:
         if convert_time(schedule["startTime"]) <= current_time < convert_time(schedule["endTime"]):
             current_x_schedule = schedule
@@ -187,6 +190,7 @@ def get_schedules(locale):
 
     # 현재 시간에 해당하는 salmonSchedule 찾기
     current_salmon_schedule = None
+    salmon_time = None
     for schedule in schedules_db["data"]["coopGroupingSchedule"]["regularSchedules"]["nodes"]:
         if convert_time(schedule["startTime"]) <= current_time < convert_time(schedule["endTime"]):
             current_salmon_schedule = schedule
@@ -198,6 +202,7 @@ def get_schedules(locale):
     
     # 현재 시간에 해당하는 eventSchedules 찾기
     current_event_schedule = None
+    event_time = None
     for schedule in schedules_db["data"]["eventSchedules"]["nodes"]:
         for time in schedule["timePeriods"]:
             if convert_time(time["startTime"]) <= current_time < convert_time(time["endTime"]):

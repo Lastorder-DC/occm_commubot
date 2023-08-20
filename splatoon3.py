@@ -111,7 +111,6 @@ def get_weapon_name(data, weapons_id):
 def get_event_info(data, event_id):
     events_data = data.get("events", {})
     event_info = events_data.get(event_id, {})
-    print(event_id)
     return event_info
 
 def get_image_id(url):
@@ -218,7 +217,7 @@ def get_schedules(locale):
     event_stages, event_images, event_rule = extract_info("EVENT", current_event_schedule, locale_db)
 
     event_data = None
-    if event_stages is []:
+    if event_rule is not None:
         event_data = {
             "type": event_rule["type"],
             "stages": event_stages,

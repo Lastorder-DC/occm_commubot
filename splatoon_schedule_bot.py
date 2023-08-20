@@ -31,7 +31,6 @@ locale = os.getenv('BOT_LOCALE')
 cur_schedule = get_schedules(locale)
 cur_salmon = cur_schedule["salmon"]
 cur_event = None
-cur_schedule = None
 
 BASE = os.getenv('MASTODON_BASE')
 
@@ -80,7 +79,7 @@ def detect_schedule_change():
 맵 : {''.join(cur_salmon['stages'])}
 무기 : {', '.join(cur_salmon['weapons'])}""", visibility=default_visibility)
         
-    if cur_event != new_schedule["event"] and new_schedule["event"] is not None:
+    if cur_event != new_schedule["event"] and new_schedule["event"] is not None and new_schedule["event"]["type"] is not None:
         cur_event = new_schedule["event"]
         event_name = cur_event['type']['name']
         event_regulation = cur_event['type']['regulation'].replace('<br />', '\n')

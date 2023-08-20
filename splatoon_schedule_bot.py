@@ -90,7 +90,7 @@ def detect_schedule_change():
 {event_regulation}
 
 
-맵 : {''.join(cur_event['stages'])}
+맵 : {', '.join(cur_event['stages'])}
 규칙 : {cur_event['rule']}""", visibility=default_visibility)
 
 schedule.every(10).seconds.do(detect_schedule_change)

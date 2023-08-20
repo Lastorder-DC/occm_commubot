@@ -80,7 +80,7 @@ def detect_schedule_change():
 맵 : {''.join(cur_salmon['stages'])}
 무기 : {', '.join(cur_salmon['weapons'])}""", visibility=default_visibility)
         
-    if cur_event != new_schedule["event"]:
+    if cur_event != new_schedule["event"] and new_schedule["event"] is not None:
         cur_event = new_schedule["event"]
         event_name = cur_event['type']['name']
         event_regulation = cur_event['type']['regulation'].replace('<br />', '\n')

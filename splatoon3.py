@@ -120,7 +120,11 @@ def get_image_id(url):
 
     return id
 
-def get_schedules(locale):
+def get_schedules(locale, target="NOW"):
+    if target not in ["NOW", "NEXT", "NEXTNEXT"]:
+        print(f"[WARNING] Invalid target {target}")
+        target = "NOW"
+
     headers = {
         'User-Agent': 'DeepCutRadio_Splat00n_ink/1.0',
         'From': 'radio@splat00n.ink'  # This is another valid field
@@ -136,7 +140,6 @@ def get_schedules(locale):
         response = requests.get(schedules_url, timeout=120, headers=headers)
         schedules_db = response.json()
         save_data_to_file(SCHEDULES_DB_FILE, schedules_db)
-        last_schedules_refresh_time = datetime.utcnow()
     
     locale_db_file = LOCALE_DB_TEMPLATE.format(locale)
     locale_db = load_data_from_file(locale_db_file)
@@ -146,10 +149,14 @@ def get_schedules(locale):
         response = requests.get(locale_url, timeout=120, headers=headers)
         locale_db = response.json()
         save_data_to_file(locale_db_file, locale_db)
-        last_locale_refresh_time = datetime.utcnow()
 
     # 현재 시간
     current_time = datetime.utcnow()
+
+    if target == "NEXT":
+        current_time = current_time + timedelta(hours=2)
+    elif target == "NEXTNEXT":
+        current_time = current_time + timedelta(hours=4)
 
     # 현재 시간에 해당하는 regularSchedules 찾기
     current_regular_schedule = None
@@ -190,35 +197,66 @@ def get_schedules(locale):
 
     # 현재 시간에 해당하는 salmonSchedule 찾기
     current_salmon_schedule = None
-    salmon_time = None
+    next_salmon_schedule = None
+    next_next_salmon_schedule = None
+    salmon_current_time = datetime.utcnow()
+
     for schedule in schedules_db["data"]["coopGroupingSchedule"]["regularSchedules"]["nodes"]:
-        if convert_time(schedule["startTime"]) <= current_time < convert_time(schedule["endTime"]):
+        start_time = convert_time(schedule["startTime"])
+        end_time = convert_time(schedule["endTime"])
+
+        if start_time <= salmon_current_time < end_time:
             current_salmon_schedule = schedule
-            salmon_time = {
-                "start": convert_time_to_readable(schedule["startTime"]),
-                "end": convert_time_to_readable(schedule["endTime"])
-            }
+
+        if current_salmon_schedule and next_salmon_schedule is None and start_time > salmon_current_time:
+            next_salmon_schedule = schedule
+            continue
+
+        if next_salmon_schedule and next_next_salmon_schedule is None and start_time > salmon_current_time:
+            next_next_salmon_schedule = schedule
             break
-    
+
+    salmon_time = {
+        "start": convert_time_to_readable(current_salmon_schedule["startTime"]),
+        "end": convert_time_to_readable(current_salmon_schedule["endTime"])
+    }
+
+    next_salmon_time = {
+        "start": convert_time_to_readable(next_salmon_schedule["startTime"]),
+        "end": convert_time_to_readable(next_salmon_schedule["endTime"])
+    }
+
+    next_next_salmon_time = {
+        "start": convert_time_to_readable(next_next_salmon_schedule["startTime"]),
+        "end": convert_time_to_readable(next_next_salmon_schedule["endTime"])
+    }
+
     # 현재 시간에 해당하는 eventSchedules 찾기
     current_event_schedule = None
     event_time = None
     for schedule in schedules_db["data"]["eventSchedules"]["nodes"]:
-        for time in schedule["timePeriods"]:
-            if convert_time(time["startTime"]) <= current_time < convert_time(time["endTime"]):
+        for schedule_time in schedule["timePeriods"]:
+            if convert_time(schedule_time["startTime"]) <= current_time < convert_time(schedule_time["endTime"]):
                 current_event_schedule = schedule
                 event_time = {
-                    "start": convert_time_to_readable(time["startTime"]),
-                    "end": convert_time_to_readable(time["endTime"])
+                    "start": convert_time_to_readable(schedule_time["startTime"]),
+                    "end": convert_time_to_readable(schedule_time["endTime"])
                 }
                 break
     
-    # 결과 출력
     regular_vs_stages, regular_vs_images, regular_vs_rule = extract_info("REGULAR", current_regular_schedule, locale_db)
     bankara_challenge_vs_stages, bankara_challenge_vs_images, bankara_challenge_vs_rule  = extract_info("CHALLENGE", current_bankara_schedule, locale_db)
     bankara_open_vs_stages, bankara_open_vs_images, bankara_open_vs_rule = extract_info("OPEN", current_bankara_schedule, locale_db)
     x_vs_stages, x_vs_images, x_vs_rule = extract_info("X", current_x_schedule, locale_db)
-    salmon_stages, salmon_images, salmon_weapons = extract_info("SALMON", current_salmon_schedule, locale_db)
+    if target == "NEXT":
+        print(current_salmon_schedule)
+        salmon_stages, salmon_images, salmon_weapons = extract_info("SALMON", next_salmon_schedule, locale_db)
+        salmon_time = next_salmon_time
+    elif target == "NEXTNEXT":
+        salmon_stages, salmon_images, salmon_weapons = extract_info("SALMON", next_next_salmon_schedule, locale_db)
+        salmon_time = next_next_salmon_time
+    else:
+        salmon_stages, salmon_images, salmon_weapons = extract_info("SALMON", current_salmon_schedule, locale_db)
     event_stages, event_images, event_rule = extract_info("EVENT", current_event_schedule, locale_db)
 
     event_data = None
@@ -266,4 +304,4 @@ def get_schedules(locale):
     }
 
 if __name__ == '__main__':
-    print(get_schedules("ko-KR"))
+    print(get_schedules("ko-KR", "NEXTNEXT"))

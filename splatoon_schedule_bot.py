@@ -161,32 +161,71 @@ class Listener(StreamListener):
                 # 조사 시트에서 키워드를 찾는다
                 look = search.find(keyword, in_column=1, case_sensitive=True).row
                 result = search.get(f"R{look}C2:R{look}C5", value_render_option="UNFORMATTED_VALUE")[0]
+                schedules = get_schedules(locale, "NOW")
+                next_schedules = get_schedules(locale, "NEXT")
+                next_next_schedules = get_schedules(locale, "NEXTNEXT")
 
                 # 현재 스케쥴 요청
-                if result[0] == "%스케쥴%":
-                    schedules = get_schedules(locale)
-                    
-                    m.status_post(f"""@{notification['status']['account']['acct']} 현재 스케쥴 정보
-
-현재 영역배틀
+                if result[0] == "%영배%":
+                    m.status_post(f"""@{notification['status']['account']['acct']} 현재 영역배틀
 맵 : {', '.join(schedules['regular']['stages'])}
 규칙 : {schedules['regular']['rule']}
 
-현재 카오폴리스 매치 챌린지
+다음 영역배틀
+맵 : {', '.join(next_schedules['regular']['stages'])}
+규칙 : {next_schedules['regular']['rule']}
+
+다음다음 영역배틀
+맵 : {', '.join(next_next_schedules['regular']['stages'])}
+규칙 : {next_next_schedules['regular']['rule']}""", in_reply_to_id=notification['status']['id'], visibility=default_visibility)
+                elif result[0] == "%챌린지%":
+                    m.status_post(f"""@{notification['status']['account']['acct']} 현재 카오폴리스 매치 챌린지
 맵 : {', '.join(schedules['challenge']['stages'])}
 규칙 : {schedules['challenge']['rule']}
 
-현재 카오폴리스 매치 오픈
+다음 카오폴리스 매치 챌린지
+맵 : {', '.join(next_schedules['challenge']['stages'])}
+규칙 : {next_schedules['challenge']['rule']}
+
+다음다음 카오폴리스 매치 챌린지
+맵 : {', '.join(next_next_schedules['challenge']['stages'])}
+규칙 : {next_next_schedules['challenge']['rule']}""", in_reply_to_id=notification['status']['id'], visibility=default_visibility)
+                elif result[0] == "%오픈%":
+                    m.status_post(f"""@{notification['status']['account']['acct']} 현재 카오폴리스 매치 오픈
 맵 : {', '.join(schedules['open']['stages'])}
 규칙 : {schedules['open']['rule']}
 
-현재 X 매치
+다음 카오폴리스 매치 챌린지
+맵 : {', '.join(next_schedules['open']['stages'])}
+규칙 : {next_schedules['open']['rule']}
+
+다음다음 카오폴리스 매치 챌린지
+맵 : {', '.join(next_next_schedules['open']['stages'])}
+규칙 : {next_next_schedules['open']['rule']}""", in_reply_to_id=notification['status']['id'], visibility=default_visibility)
+                elif result[0] == "%엑스%":
+                    m.status_post(f"""@{notification['status']['account']['acct']} 현재 X 매치
 맵 : {', '.join(schedules['xmatch']['stages'])}
 규칙 : {schedules['xmatch']['rule']}
 
-현재 연어런
+다음 X 매치
+맵 : {', '.join(next_schedules['xmatch']['stages'])}
+규칙 : {next_schedules['xmatch']['rule']}
+
+다음다음 X 매치
+맵 : {', '.join(next_next_schedules['xmatch']['stages'])}
+규칙 : {next_next_schedules['xmatch']['rule']}""", in_reply_to_id=notification['status']['id'], visibility=default_visibility)
+                elif result[0] == "%연어%":
+                    m.status_post(f"""@{notification['status']['account']['acct']} 현재 연어런
 맵 : {''.join(schedules["salmon"]['stages'])}
-무기 : {', '.join(schedules["salmon"]['weapons'])}""", in_reply_to_id=notification['status']['id'], visibility=default_visibility)
+무기 : {', '.join(schedules["salmon"]['weapons'])}
+
+다음 연어런
+맵 : {''.join(next_schedules["salmon"]['stages'])}
+무기 : {', '.join(next_schedules["salmon"]['weapons'])}
+
+다음다음 연어런
+맵 : {''.join(next_next_schedules["salmon"]['stages'])}
+무기 : {', '.join(next_next_schedules["salmon"]['weapons'])}""", in_reply_to_id=notification['status']['id'], visibility=default_visibility)
                 else:
                     # 조사 선택지인 경우
                     if result[1] is True:

@@ -249,7 +249,6 @@ def get_schedules(locale, target="NOW"):
     bankara_open_vs_stages, bankara_open_vs_images, bankara_open_vs_rule = extract_info("OPEN", current_bankara_schedule, locale_db)
     x_vs_stages, x_vs_images, x_vs_rule = extract_info("X", current_x_schedule, locale_db)
     if target == "NEXT":
-        print(current_salmon_schedule)
         salmon_stages, salmon_images, salmon_weapons = extract_info("SALMON", next_salmon_schedule, locale_db)
         salmon_time = next_salmon_time
     elif target == "NEXTNEXT":

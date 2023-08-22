@@ -233,7 +233,9 @@ def get_schedules(locale, target="NOW"):
 
     # 현재 시간에 해당하는 eventSchedules 찾기
     current_event_schedule = None
+    upcoming_event_schedule = None
     event_time = None
+    upcoming_event_time = None
     for schedule in schedules_db["data"]["eventSchedules"]["nodes"]:
         for schedule_time in schedule["timePeriods"]:
             if convert_time(schedule_time["startTime"]) <= current_time < convert_time(schedule_time["endTime"]):
@@ -243,6 +245,17 @@ def get_schedules(locale, target="NOW"):
                     "end": convert_time_to_readable(schedule_time["endTime"])
                 }
                 break
+    
+    if current_event_schedule is None:
+        for schedule in schedules_db["data"]["eventSchedules"]["nodes"]:
+            for schedule_time in schedule["timePeriods"]:
+                if convert_time(schedule_time["startTime"]) <= (current_time + timedelta(minutes=30)) < convert_time(schedule_time["endTime"]):
+                    upcoming_event_schedule = schedule
+                    upcoming_event_time = {
+                        "start": convert_time_to_readable(schedule_time["startTime"]),
+                        "end": convert_time_to_readable(schedule_time["endTime"])
+                    }
+                    break
     
     regular_vs_stages, regular_vs_images, regular_vs_rule = extract_info("REGULAR", current_regular_schedule, locale_db)
     bankara_challenge_vs_stages, bankara_challenge_vs_images, bankara_challenge_vs_rule  = extract_info("CHALLENGE", current_bankara_schedule, locale_db)
@@ -257,15 +270,26 @@ def get_schedules(locale, target="NOW"):
     else:
         salmon_stages, salmon_images, salmon_weapons = extract_info("SALMON", current_salmon_schedule, locale_db)
     event_stages, event_images, event_rule = extract_info("EVENT", current_event_schedule, locale_db)
+    upcoming_event_stages, upcoming_event_images, upcoming_event_rule = extract_info("EVENT", upcoming_event_schedule, locale_db)
 
     event_data = None
-    if event_rule is not None:
+    if event_time is not None:
         event_data = {
             "type": event_rule["type"],
             "stages": event_stages,
             "images": event_images,
             "rule": event_rule["rules"],
             "time": event_time
+        }
+    
+    upcoming_event_data = None
+    if upcoming_event_time is not None:
+        upcoming_event_data = {
+            "type": upcoming_event_rule["type"],
+            "stages": upcoming_event_stages,
+            "images": upcoming_event_images,
+            "rule": upcoming_event_rule["rules"],
+            "time": upcoming_event_time
         }
 
     return {
@@ -299,8 +323,9 @@ def get_schedules(locale, target="NOW"):
             "weapons": salmon_weapons,
             "time": salmon_time
         },
-        "event": event_data
+        "event": event_data,
+        "next_event": upcoming_event_data
     }
 
 if __name__ == '__main__':
-    print(get_schedules("ko-KR", "NEXTNEXT"))
+    print(get_schedules("ko-KR"))

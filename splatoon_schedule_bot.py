@@ -31,6 +31,7 @@ locale = os.getenv('BOT_LOCALE')
 cur_schedule = get_schedules(locale)
 cur_salmon = cur_schedule["salmon"]
 cur_event = None
+next_event = None
 
 BASE = os.getenv('MASTODON_BASE')
 
@@ -48,6 +49,7 @@ def detect_schedule_change():
     global cur_schedule
     global cur_salmon
     global cur_event
+    global next_event
     new_schedule = get_schedules(locale)
 
     if cur_schedule != new_schedule:
@@ -79,7 +81,7 @@ def detect_schedule_change():
 맵 : {''.join(cur_salmon['stages'])}
 무기 : {', '.join(cur_salmon['weapons'])}""", visibility=default_visibility)
         
-    if cur_event != new_schedule["event"] and new_schedule["event"] is not None and new_schedule["event"]["type"] is not None:
+    if cur_event != new_schedule["event"] and new_schedule["event"] is not None:
         cur_event = new_schedule["event"]
         event_name = cur_event['type']['name']
         event_regulation = cur_event['type']['regulation'].replace('<br />', '\n')
@@ -92,6 +94,31 @@ def detect_schedule_change():
 
 맵 : {', '.join(cur_event['stages'])}
 규칙 : {cur_event['rule']}""", visibility=default_visibility)
+    
+    # 현재 이벤트중이 아니면서, 저장한 다음 이벤트가 달라졌다면 공지!
+    if new_schedule["event"] is None and next_event != new_schedule["next_event"] and new_schedule["next_event"] is not None:
+        next_event = new_schedule["next_event"]
+        event_name = next_event['type']['name']
+        event_regulation = next_event['type']['regulation'].replace('<br />', '\n')
+        m.status_post(f"""30분뒤 이벤트 매치 진행 예정!
+{next_event['time']['start']} ~ {next_event['time']['end']}
+
+{event_name}
+{event_regulation}
+
+
+맵 : {', '.join(next_event['stages'])}
+규칙 : {next_event['rule']}""", visibility=default_visibility)
+    
+    # 현재 이벤트중이면서, 저장한 다음 이벤트가 없다면 공지!
+    if new_schedule["event"] is not None and next_event != new_schedule["next_event"] and new_schedule["next_event"] is None:
+        next_event = new_schedule["next_event"]
+        event_name = next_event['type']['name']
+        event_regulation = next_event['type']['regulation'].replace('<br />', '\n')
+        m.status_post(f"""30분뒤 이벤트 매치 종료 예정!
+{next_event['time']['start']} ~ {next_event['time']['end']}
+
+{event_name}""", visibility=default_visibility)
 
 schedule.every(10).seconds.do(detect_schedule_change)
 

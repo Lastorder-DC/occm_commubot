@@ -112,11 +112,11 @@ def detect_schedule_change():
     
     # 현재 이벤트중이면서, 저장한 다음 이벤트가 없다면 공지!
     if new_schedule["event"] is not None and next_event != new_schedule["next_event"] and new_schedule["next_event"] is None:
-        next_event = new_schedule["next_event"]
-        event_name = next_event['type']['name']
-        event_regulation = next_event['type']['regulation'].replace('<br />', '\n')
+        cur_event = new_schedule["event"]
+        event_name = cur_event['type']['name']
+        event_regulation = cur_event['type']['regulation'].replace('<br />', '\n')
         m.status_post(f"""30분뒤 이벤트 매치 종료 예정!
-{next_event['time']['start']} ~ {next_event['time']['end']}
+{cur_event['time']['start']} ~ {cur_event['time']['end']}
 
 {event_name}""", visibility=default_visibility)
 

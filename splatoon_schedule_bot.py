@@ -16,7 +16,7 @@ load_dotenv()
 salmon_typestr = {
     "regular": "",
     "big_run": ":EtcLogo_Big_Run: 빅 런 발생!\n",
-    "team_contest": ":EtcLogo_Team_Contest: 아르바이트 팀 콘테스트 진행중!\n"
+    "team_contest": ":EtcLogo_Eggstra_Work: 아르바이트 팀 콘테스트 진행중!\n"
 }
 
 # 구글시트 세팅

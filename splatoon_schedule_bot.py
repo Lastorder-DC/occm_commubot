@@ -79,9 +79,9 @@ def detect_schedule_change():
 맵 : {', '.join(cur_schedule['xmatch']['stages'])}
 규칙 : {cur_schedule['xmatch']['rule']}""", visibility=default_visibility)
         
-        if cur_salmon != new_schedule["salmon"]:
-            cur_salmon = new_schedule["salmon"]
-            m.status_post(f"""연어런 스케쥴 변경!
+    if cur_salmon != new_schedule["salmon"]:
+        cur_salmon = new_schedule["salmon"]
+        m.status_post(f"""연어런 스케쥴 변경!
 {cur_salmon['time']['start']} ~ {cur_salmon['time']['end']}
 
 {salmon_typestr[cur_salmon['type']]}맵 : {''.join(cur_salmon['stages'])}

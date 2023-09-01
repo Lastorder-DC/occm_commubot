@@ -63,25 +63,25 @@ def detect_schedule_change():
         m.status_post(f"""스케쥴이 업데이트되었습니다.
 {cur_schedule['regular']['time']['start']} ~ {cur_schedule['regular']['time']['end']}
 
-현재 영역배틀
+:EtcLogo_Regular_Battle: 현재 레귤러 매치
 맵 : {', '.join(cur_schedule['regular']['stages'])}
 규칙 : {cur_schedule['regular']['rule']}
 
-현재 카오폴리스 매치 챌린지
+:EtcLogo_Ranked_Battle: 현재 카오폴리스 매치 챌린지
 맵 : {', '.join(cur_schedule['challenge']['stages'])}
 규칙 : {cur_schedule['challenge']['rule']}
 
-현재 카오폴리스 매치 오픈
+:EtcLogo_Ranked_Battle: 현재 카오폴리스 매치 오픈
 맵 : {', '.join(cur_schedule['open']['stages'])}
 규칙 : {cur_schedule['open']['rule']}
 
-현재 X 매치
+:EtcLogo_X_Battle: 현재 X 매치
 맵 : {', '.join(cur_schedule['xmatch']['stages'])}
 규칙 : {cur_schedule['xmatch']['rule']}""", visibility=default_visibility)
         
     if cur_salmon != new_schedule["salmon"]:
         cur_salmon = new_schedule["salmon"]
-        m.status_post(f"""연어런 스케쥴 변경!
+        m.status_post(f""":EtcLogo_Grizzco: 연어런 스케쥴 변경!
 {cur_salmon['time']['start']} ~ {cur_salmon['time']['end']}
 
 {salmon_typestr[cur_salmon['type']]}맵 : {''.join(cur_salmon['stages'])}
@@ -91,7 +91,7 @@ def detect_schedule_change():
         cur_event = new_schedule["event"]
         event_name = cur_event['type']['name']
         event_regulation = cur_event['type']['regulation'].replace('<br />', '\n')
-        m.status_post(f"""이벤트 매치 진행중!
+        m.status_post(f""":EtcLogo_Challenge: 이벤트 매치 진행중!
 {cur_event['time']['start']} ~ {cur_event['time']['end']}
 
 {event_name}
@@ -106,7 +106,7 @@ def detect_schedule_change():
         next_event = new_schedule["next_event"]
         event_name = next_event['type']['name']
         event_regulation = next_event['type']['regulation'].replace('<br />', '\n')
-        m.status_post(f"""30분뒤 이벤트 매치 진행 예정!
+        m.status_post(f""":EtcLogo_Challenge: 30분뒤 이벤트 매치 진행 예정!
 {next_event['time']['start']} ~ {next_event['time']['end']}
 
 {event_name}
@@ -190,100 +190,100 @@ class Listener(StreamListener):
 
                 # 현재 스케쥴 요청
                 if result[0] == "%영배%":
-                    m.status_post(f"""@{notification['status']['account']['acct']} 현재 레귤러 매치
+                    m.status_post(f"""@{notification['status']['account']['acct']} :EtcLogo_Regular_Battle: 현재 레귤러 매치
 {schedules['regular']['time']['start']} ~ {schedules['regular']['time']['end']}
 
 맵 : {', '.join(schedules['regular']['stages'])}
 규칙 : {schedules['regular']['rule']}
 
 
-다음 영역배틀
+다음 스케쥴
 {next_schedules['regular']['time']['start']} ~ {next_schedules['regular']['time']['end']}
 
 맵 : {', '.join(next_schedules['regular']['stages'])}
 규칙 : {next_schedules['regular']['rule']}
 
 
-다음다음 영역배틀
+다음다음 스케쥴
 {next_next_schedules['regular']['time']['start']} ~ {next_next_schedules['regular']['time']['end']}
 
 맵 : {', '.join(next_next_schedules['regular']['stages'])}
 규칙 : {next_next_schedules['regular']['rule']}""", in_reply_to_id=notification['status']['id'], visibility=default_visibility)
                 elif result[0] == "%챌린지%":
-                    m.status_post(f"""@{notification['status']['account']['acct']} 현재 카오폴리스 매치 챌린지
+                    m.status_post(f"""@{notification['status']['account']['acct']} :EtcLogo_Ranked_Battle: 현재 카오폴리스 매치 챌린지
 {schedules['challenge']['time']['start']} ~ {schedules['challenge']['time']['end']}
 
 맵 : {', '.join(schedules['challenge']['stages'])}
 규칙 : {schedules['challenge']['rule']}
 
 
-다음 카오폴리스 매치 챌린지
+다음 스케쥴
 {next_schedules['challenge']['time']['start']} ~ {next_schedules['challenge']['time']['end']}
 
 맵 : {', '.join(next_schedules['challenge']['stages'])}
 규칙 : {next_schedules['challenge']['rule']}
 
 
-다음다음 카오폴리스 매치 챌린지
+다음다음 스케쥴
 {next_next_schedules['challenge']['time']['start']} ~ {next_next_schedules['challenge']['time']['end']}
 맵 : {', '.join(next_next_schedules['challenge']['stages'])}
 규칙 : {next_next_schedules['challenge']['rule']}""", in_reply_to_id=notification['status']['id'], visibility=default_visibility)
                 elif result[0] == "%오픈%":
-                    m.status_post(f"""@{notification['status']['account']['acct']} 현재 카오폴리스 매치 오픈
+                    m.status_post(f"""@{notification['status']['account']['acct']} :EtcLogo_Ranked_Battle: 현재 카오폴리스 매치 오픈
 {schedules['open']['time']['start']} ~ {schedules['open']['time']['end']}
 
 맵 : {', '.join(schedules['open']['stages'])}
 규칙 : {schedules['open']['rule']}
 
 
-다음 카오폴리스 매치 챌린지
+다음 스케쥴
 {next_schedules['open']['time']['start']} ~ {next_schedules['open']['time']['end']}
 
 맵 : {', '.join(next_schedules['open']['stages'])}
 규칙 : {next_schedules['open']['rule']}
 
 
-다음다음 카오폴리스 매치 챌린지
+다음다음 스케쥴
 {next_next_schedules['open']['time']['start']} ~ {next_next_schedules['open']['time']['end']}
 
 맵 : {', '.join(next_next_schedules['open']['stages'])}
 규칙 : {next_next_schedules['open']['rule']}""", in_reply_to_id=notification['status']['id'], visibility=default_visibility)
                 elif result[0] == "%엑스%":
-                    m.status_post(f"""@{notification['status']['account']['acct']} 현재 X 매치
+                    m.status_post(f"""@{notification['status']['account']['acct']} :EtcLogo_X_Battle: 현재 X 매치
 {schedules['xmatch']['time']['start']} ~ {schedules['xmatch']['time']['end']}
 
 맵 : {', '.join(schedules['xmatch']['stages'])}
 규칙 : {schedules['xmatch']['rule']}
 
 
-다음 X 매치
+다음 스케쥴
 {next_schedules['xmatch']['time']['start']} ~ {next_schedules['xmatch']['time']['end']}
 
 맵 : {', '.join(next_schedules['xmatch']['stages'])}
 규칙 : {next_schedules['xmatch']['rule']}
 
 
-다음다음 X 매치
+다음다음 스케쥴
 {next_next_schedules['xmatch']['time']['start']} ~ {next_next_schedules['xmatch']['time']['end']}
 
 맵 : {', '.join(next_next_schedules['xmatch']['stages'])}
 규칙 : {next_next_schedules['xmatch']['rule']}""", in_reply_to_id=notification['status']['id'], visibility=default_visibility)
                 elif result[0] == "%연어%":
-                    m.status_post(f"""@{notification['status']['account']['acct']} 현재 연어런
+                    m.status_post(f"""@{notification['status']['account']['acct']} :EtcLogo_Grizzco: 현재 연어런
 {schedules['salmon']['time']['start']} ~ {schedules['salmon']['time']['end']}
 
 {salmon_typestr[schedules["salmon"]['type']]}맵 : {''.join(schedules["salmon"]['stages'])}
 무기 : {', '.join(schedules["salmon"]['weapons'])}
 
 
-다음 연어런
+다음 스케쥴
 {next_schedules['salmon']['time']['start']} ~ {next_schedules['salmon']['time']['end']}
 
 {salmon_typestr[next_schedules["salmon"]['type']]}맵 : {''.join(next_schedules["salmon"]['stages'])}
 무기 : {', '.join(next_schedules["salmon"]['weapons'])}
 
 
-다음다음 연어런
+다음다음 스케쥴
 {next_next_schedules['salmon']['time']['start']} ~ {next_next_schedules['salmon']['time']['end']}
 
 {salmon_typestr[next_next_schedules["salmon"]['type']]}맵 : {''.join(next_next_schedules["salmon"]['stages'])}

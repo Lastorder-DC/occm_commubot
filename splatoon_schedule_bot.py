@@ -15,8 +15,8 @@ load_dotenv()
 
 salmon_typestr = {
     "regular": "",
-    "big_run": "빅 런 발생!\n",
-    "team_contest": "아르바이트 팀 콘테스트 진행중!\n"
+    "big_run": ":EtcLogo_Big_Run: 빅 런 발생!\n",
+    "team_contest": ":EtcLogo_Team_Contest: 아르바이트 팀 콘테스트 진행중!\n"
 }
 
 # 구글시트 세팅
@@ -190,63 +190,102 @@ class Listener(StreamListener):
 
                 # 현재 스케쥴 요청
                 if result[0] == "%영배%":
-                    m.status_post(f"""@{notification['status']['account']['acct']} 현재 영역배틀
+                    m.status_post(f"""@{notification['status']['account']['acct']} 현재 레귤러 매치
+{schedules['regular']['time']['start']} ~ {schedules['regular']['time']['end']}
+
 맵 : {', '.join(schedules['regular']['stages'])}
 규칙 : {schedules['regular']['rule']}
 
+
 다음 영역배틀
+{next_schedules['regular']['time']['start']} ~ {next_schedules['regular']['time']['end']}
+
 맵 : {', '.join(next_schedules['regular']['stages'])}
 규칙 : {next_schedules['regular']['rule']}
 
+
 다음다음 영역배틀
+{next_next_schedules['regular']['time']['start']} ~ {next_next_schedules['regular']['time']['end']}
+
 맵 : {', '.join(next_next_schedules['regular']['stages'])}
 규칙 : {next_next_schedules['regular']['rule']}""", in_reply_to_id=notification['status']['id'], visibility=default_visibility)
                 elif result[0] == "%챌린지%":
                     m.status_post(f"""@{notification['status']['account']['acct']} 현재 카오폴리스 매치 챌린지
+{schedules['challenge']['time']['start']} ~ {schedules['challenge']['time']['end']}
+
 맵 : {', '.join(schedules['challenge']['stages'])}
 규칙 : {schedules['challenge']['rule']}
 
+
 다음 카오폴리스 매치 챌린지
+{next_schedules['challenge']['time']['start']} ~ {next_schedules['challenge']['time']['end']}
+
 맵 : {', '.join(next_schedules['challenge']['stages'])}
 규칙 : {next_schedules['challenge']['rule']}
 
+
 다음다음 카오폴리스 매치 챌린지
+{next_next_schedules['challenge']['time']['start']} ~ {next_next_schedules['challenge']['time']['end']}
 맵 : {', '.join(next_next_schedules['challenge']['stages'])}
 규칙 : {next_next_schedules['challenge']['rule']}""", in_reply_to_id=notification['status']['id'], visibility=default_visibility)
                 elif result[0] == "%오픈%":
                     m.status_post(f"""@{notification['status']['account']['acct']} 현재 카오폴리스 매치 오픈
+{schedules['open']['time']['start']} ~ {schedules['open']['time']['end']}
+
 맵 : {', '.join(schedules['open']['stages'])}
 규칙 : {schedules['open']['rule']}
 
+
 다음 카오폴리스 매치 챌린지
+{next_schedules['open']['time']['start']} ~ {next_schedules['open']['time']['end']}
+
 맵 : {', '.join(next_schedules['open']['stages'])}
 규칙 : {next_schedules['open']['rule']}
 
+
 다음다음 카오폴리스 매치 챌린지
+{next_next_schedules['open']['time']['start']} ~ {next_next_schedules['open']['time']['end']}
+
 맵 : {', '.join(next_next_schedules['open']['stages'])}
 규칙 : {next_next_schedules['open']['rule']}""", in_reply_to_id=notification['status']['id'], visibility=default_visibility)
                 elif result[0] == "%엑스%":
                     m.status_post(f"""@{notification['status']['account']['acct']} 현재 X 매치
+{schedules['xmatch']['time']['start']} ~ {schedules['xmatch']['time']['end']}
+
 맵 : {', '.join(schedules['xmatch']['stages'])}
 규칙 : {schedules['xmatch']['rule']}
 
+
 다음 X 매치
+{next_schedules['xmatch']['time']['start']} ~ {next_schedules['xmatch']['time']['end']}
+
 맵 : {', '.join(next_schedules['xmatch']['stages'])}
 규칙 : {next_schedules['xmatch']['rule']}
 
+
 다음다음 X 매치
+{next_next_schedules['xmatch']['time']['start']} ~ {next_next_schedules['xmatch']['time']['end']}
+
 맵 : {', '.join(next_next_schedules['xmatch']['stages'])}
 규칙 : {next_next_schedules['xmatch']['rule']}""", in_reply_to_id=notification['status']['id'], visibility=default_visibility)
                 elif result[0] == "%연어%":
                     m.status_post(f"""@{notification['status']['account']['acct']} 현재 연어런
+{schedules['salmon']['time']['start']} ~ {schedules['salmon']['time']['end']}
+
 {salmon_typestr[schedules["salmon"]['type']]}맵 : {''.join(schedules["salmon"]['stages'])}
 무기 : {', '.join(schedules["salmon"]['weapons'])}
 
+
 다음 연어런
+{next_schedules['salmon']['time']['start']} ~ {next_schedules['salmon']['time']['end']}
+
 {salmon_typestr[next_schedules["salmon"]['type']]}맵 : {''.join(next_schedules["salmon"]['stages'])}
 무기 : {', '.join(next_schedules["salmon"]['weapons'])}
 
+
 다음다음 연어런
+{next_next_schedules['salmon']['time']['start']} ~ {next_next_schedules['salmon']['time']['end']}
+
 {salmon_typestr[next_next_schedules["salmon"]['type']]}맵 : {''.join(next_next_schedules["salmon"]['stages'])}
 무기 : {', '.join(next_next_schedules["salmon"]['weapons'])}""", in_reply_to_id=notification['status']['id'], visibility=default_visibility)
                 else:

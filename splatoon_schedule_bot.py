@@ -13,6 +13,12 @@ from dotenv import load_dotenv
 from splatoon3 import get_schedules
 load_dotenv()
 
+salmon_typestr = {
+    "regular": "",
+    "big_run": "빅 런 발생!\n",
+    "team_contest": "아르바이트 팀 콘테스트 진행중!\n"
+}
+
 # 구글시트 세팅
 scope = ["https://spreadsheets.google.com/feeds",
          "https://www.googleapis.com/auth/spreadsheets",
@@ -78,7 +84,7 @@ def detect_schedule_change():
             m.status_post(f"""연어런 스케쥴 변경!
 {cur_salmon['time']['start']} ~ {cur_salmon['time']['end']}
 
-맵 : {''.join(cur_salmon['stages'])}
+{salmon_typestr[cur_salmon['type']]}맵 : {''.join(cur_salmon['stages'])}
 무기 : {', '.join(cur_salmon['weapons'])}""", visibility=default_visibility)
         
     if cur_event != new_schedule["event"] and new_schedule["event"] is not None:

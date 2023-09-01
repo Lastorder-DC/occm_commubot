@@ -239,15 +239,15 @@ class Listener(StreamListener):
 규칙 : {next_next_schedules['xmatch']['rule']}""", in_reply_to_id=notification['status']['id'], visibility=default_visibility)
                 elif result[0] == "%연어%":
                     m.status_post(f"""@{notification['status']['account']['acct']} 현재 연어런
-맵 : {''.join(schedules["salmon"]['stages'])}
+{salmon_typestr[schedules["salmon"]['type']]}맵 : {''.join(schedules["salmon"]['stages'])}
 무기 : {', '.join(schedules["salmon"]['weapons'])}
 
 다음 연어런
-맵 : {''.join(next_schedules["salmon"]['stages'])}
+{salmon_typestr[next_schedules["salmon"]['type']]}맵 : {''.join(next_schedules["salmon"]['stages'])}
 무기 : {', '.join(next_schedules["salmon"]['weapons'])}
 
 다음다음 연어런
-맵 : {''.join(next_next_schedules["salmon"]['stages'])}
+{salmon_typestr[next_next_schedules["salmon"]['type']]}맵 : {''.join(next_next_schedules["salmon"]['stages'])}
 무기 : {', '.join(next_next_schedules["salmon"]['weapons'])}""", in_reply_to_id=notification['status']['id'], visibility=default_visibility)
                 else:
                     # 조사 선택지인 경우

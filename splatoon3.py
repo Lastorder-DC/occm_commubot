@@ -64,7 +64,6 @@ def extract_info(type, schedule, locale_db):
         vs_rule = get_rules_name(locale_db, schedule["regularMatchSetting"]["vsRule"]["id"])
     if schedule and "bankaraMatchSettings" in schedule:
         for bankara_match_setting in schedule["bankaraMatchSettings"]:
-            print(bankara_match_setting)
             if bankara_match_setting["bankaraMode"] != type:
                 continue
             vs_stages = [get_stage_name(locale_db, stage["id"]) for stage in bankara_match_setting["vsStages"]]

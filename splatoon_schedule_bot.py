@@ -32,6 +32,12 @@ salmon_typestr = {
     "team_contest": ":EtcLogo_Eggstra_Work: 아르바이트 팀 콘테스트 진행중!\n"
 }
 
+salmon_typestr_twt = {
+    "regular": "",
+    "big_run": "빅 런 발생!\n",
+    "team_contest": "아르바이트 팀 콘테스트 진행중!\n"
+}
+
 # 구글시트 세팅
 scope = ["https://spreadsheets.google.com/feeds",
          "https://www.googleapis.com/auth/spreadsheets",
@@ -73,23 +79,27 @@ def detect_schedule_change():
 
     if cur_schedule != new_schedule:
         cur_schedule = new_schedule
-        updatetwt_1 = client.create_tweet(text=f"""스케쥴이 업데이트되었습니다.
-{cur_schedule['regular']['time']['start']} ~ {cur_schedule['regular']['time']['end']}
+        try:
+            updatetwt_1 = client.create_tweet(text=f"""스케쥴이 업데이트되었습니다.
+    {cur_schedule['regular']['time']['start']} ~ {cur_schedule['regular']['time']['end']}
 
-현재 레귤러 매치
-맵 : {', '.join(cur_schedule['regular']['stages'])}
-규칙 : {cur_schedule['regular']['rule']}
+    현재 레귤러 매치
+    맵 : {', '.join(cur_schedule['regular']['stages'])}
+    규칙 : {cur_schedule['regular']['rule']}
 
-현재 카오폴리스 매치 챌린지
-맵 : {', '.join(cur_schedule['challenge']['stages'])}
-규칙 : {cur_schedule['challenge']['rule']}""")
-        client.create_tweet(text=f"""현재 카오폴리스 매치 오픈
-맵 : {', '.join(cur_schedule['open']['stages'])}
-규칙 : {cur_schedule['open']['rule']}
+    현재 카오폴리스 매치 챌린지
+    맵 : {', '.join(cur_schedule['challenge']['stages'])}
+    규칙 : {cur_schedule['challenge']['rule']}""")
+            client.create_tweet(text=f"""현재 카오폴리스 매치 오픈
+    맵 : {', '.join(cur_schedule['open']['stages'])}
+    규칙 : {cur_schedule['open']['rule']}
 
-현재 X 매치
-맵 : {', '.join(cur_schedule['xmatch']['stages'])}
-규칙 : {cur_schedule['xmatch']['rule']}""", in_reply_to_tweet_id=updatetwt_1["id"])
+    현재 X 매치
+    맵 : {', '.join(cur_schedule['xmatch']['stages'])}
+    규칙 : {cur_schedule['xmatch']['rule']}""", in_reply_to_tweet_id=updatetwt_1.data['id'])
+        except Exception as e:
+            print(e)
+            pass
         m.status_post(f"""스케쥴이 업데이트되었습니다.
 {cur_schedule['regular']['time']['start']} ~ {cur_schedule['regular']['time']['end']}
 
@@ -111,12 +121,23 @@ def detect_schedule_change():
         
     if cur_salmon != new_schedule["salmon"]:
         cur_salmon = new_schedule["salmon"]
+        try:
+            twt_wpn = [ re.sub(r"^:[^:]+:\s*", "", item) for item in cur_salmon["weapons"] ]
+            client.create_tweet(text=f"""연어런 스케쥴 변경!
+{cur_salmon['time']['start']} ~ {cur_salmon['time']['end']}
+
+{salmon_typestr_twt[cur_salmon['type']]}맵 : {''.join(cur_salmon['stages'])}
+무기 : {', '.join(twt_wpn)}""")
+        except Exception as e:
+            print(e)
+            pass
+        
         m.status_post(f""":EtcLogo_Grizzco: 연어런 스케쥴 변경!
 {cur_salmon['time']['start']} ~ {cur_salmon['time']['end']}
 
 {salmon_typestr[cur_salmon['type']]}맵 : {''.join(cur_salmon['stages'])}
 무기 : {', '.join(cur_salmon['weapons'])}""", visibility=default_visibility)
-        
+
     if cur_event != new_schedule["event"] and new_schedule["event"] is not None:
         cur_event = new_schedule["event"]
         event_name = cur_event['type']['name']

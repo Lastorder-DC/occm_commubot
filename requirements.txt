@@ -5,3 +5,4 @@ google-auth==2.22.0
 pyjosa==1.0.3
 pytest==7.4.0
 pytest-mock==3.11.1
+tweepy==4.14.0

@@ -163,3 +163,6 @@ key.json
 
 locale_*.json
 schedules_db.json
+
+# Twitter testfile
+twt.py

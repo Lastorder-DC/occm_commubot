@@ -80,7 +80,16 @@ def extract_info(type, schedule, locale_db):
     if schedule and "setting" in schedule:
         vs_stages = [get_stage_name(locale_db, schedule["setting"]["coopStage"]["id"]), ]
         vs_images = [schedule["setting"]["coopStage"]["image"]["url"], ]
-        vs_rule = [f":WPN_{get_image_id(weapon['image']['url'])}: {get_weapon_name(locale_db, weapon['__splatoon3ink_id'])}" for weapon in schedule["setting"]["weapons"]]
+        if schedule["setting"]["__typename"] == "CoopBigRunSetting":
+            vs_type = "big_run"
+        elif schedule["setting"]["__typename"] == "CoopTeamContestSetting":
+            vs_type = "team_contest"
+        else:
+            vs_type = "regular"
+        vs_rule = {
+            "type": vs_type,
+            "weapons": [f":WPN_{get_image_id(weapon['image']['url'])}: {get_weapon_name(locale_db, weapon['__splatoon3ink_id'])}" for weapon in schedule["setting"]["weapons"]]
+        }
     if schedule and "leagueMatchSetting" in schedule:
         vs_stages = [get_stage_name(locale_db, stage["id"]) for stage in schedule["leagueMatchSetting"]["vsStages"]]
         vs_images = [stage["image"]["url"] for stage in schedule["leagueMatchSetting"]["vsStages"]]
@@ -201,7 +210,17 @@ def get_schedules(locale, target="NOW"):
     next_next_salmon_schedule = None
     salmon_current_time = datetime.utcnow()
 
-    for schedule in schedules_db["data"]["coopGroupingSchedule"]["regularSchedules"]["nodes"]:
+    regular_salmon_schedules = schedules_db["data"]["coopGroupingSchedule"]["regularSchedules"]["nodes"]
+    big_run_schedules = schedules_db["data"]["coopGroupingSchedule"]["bigRunSchedules"]["nodes"]
+    team_contest_schedules = schedules_db["data"]["coopGroupingSchedule"]["teamContestSchedules"]["nodes"]
+
+    # regularSchedules와 bigRunSchedules의 노드를 합침
+    combined_salmon_schedules = regular_salmon_schedules + big_run_schedules + team_contest_schedules
+
+    # startTime을 기준으로 오름차순으로 정렬
+    sorted_salmon_schedules = sorted(combined_salmon_schedules, key=lambda x: x["startTime"])
+
+    for schedule in sorted_salmon_schedules:
         start_time = convert_time(schedule["startTime"])
         end_time = convert_time(schedule["endTime"])
 
@@ -262,13 +281,13 @@ def get_schedules(locale, target="NOW"):
     bankara_open_vs_stages, bankara_open_vs_images, bankara_open_vs_rule = extract_info("OPEN", current_bankara_schedule, locale_db)
     x_vs_stages, x_vs_images, x_vs_rule = extract_info("X", current_x_schedule, locale_db)
     if target == "NEXT":
-        salmon_stages, salmon_images, salmon_weapons = extract_info("SALMON", next_salmon_schedule, locale_db)
+        salmon_stages, salmon_images, salmon_info = extract_info("SALMON", next_salmon_schedule, locale_db)
         salmon_time = next_salmon_time
     elif target == "NEXTNEXT":
-        salmon_stages, salmon_images, salmon_weapons = extract_info("SALMON", next_next_salmon_schedule, locale_db)
+        salmon_stages, salmon_images, salmon_info = extract_info("SALMON", next_next_salmon_schedule, locale_db)
         salmon_time = next_next_salmon_time
     else:
-        salmon_stages, salmon_images, salmon_weapons = extract_info("SALMON", current_salmon_schedule, locale_db)
+        salmon_stages, salmon_images, salmon_info = extract_info("SALMON", current_salmon_schedule, locale_db)
     event_stages, event_images, event_rule = extract_info("EVENT", current_event_schedule, locale_db)
     upcoming_event_stages, upcoming_event_images, upcoming_event_rule = extract_info("EVENT", upcoming_event_schedule, locale_db)
 
@@ -318,9 +337,10 @@ def get_schedules(locale, target="NOW"):
             "time": x_vs_time
         },
         "salmon": {
+            "type": salmon_info["type"],
             "stages": salmon_stages,
             "images": salmon_images,
-            "weapons": salmon_weapons,
+            "weapons": salmon_info["weapons"],
             "time": salmon_time
         },
         "event": event_data,
@@ -328,4 +348,4 @@ def get_schedules(locale, target="NOW"):
     }
 
 if __name__ == '__main__':
-    print(get_schedules("ko-KR", "NEXT"))
+    print(get_schedules("ko-KR"))

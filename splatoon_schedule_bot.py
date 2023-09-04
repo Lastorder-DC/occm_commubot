@@ -83,20 +83,20 @@ def detect_schedule_change():
             updatetwt_1 = client.create_tweet(text=f"""스케쥴이 업데이트되었습니다.
     {cur_schedule['regular']['time']['start']} ~ {cur_schedule['regular']['time']['end']}
 
-    현재 레귤러 매치
-    맵 : {', '.join(cur_schedule['regular']['stages'])}
-    규칙 : {cur_schedule['regular']['rule']}
+현재 레귤러 매치
+맵 : {', '.join(cur_schedule['regular']['stages'])}
+규칙 : {cur_schedule['regular']['rule']}
 
-    현재 카오폴리스 매치 챌린지
-    맵 : {', '.join(cur_schedule['challenge']['stages'])}
-    규칙 : {cur_schedule['challenge']['rule']}""")
+현재 카오폴리스 매치 챌린지
+맵 : {', '.join(cur_schedule['challenge']['stages'])}
+규칙 : {cur_schedule['challenge']['rule']}""")
             client.create_tweet(text=f"""현재 카오폴리스 매치 오픈
-    맵 : {', '.join(cur_schedule['open']['stages'])}
-    규칙 : {cur_schedule['open']['rule']}
+맵 : {', '.join(cur_schedule['open']['stages'])}
+규칙 : {cur_schedule['open']['rule']}
 
-    현재 X 매치
-    맵 : {', '.join(cur_schedule['xmatch']['stages'])}
-    규칙 : {cur_schedule['xmatch']['rule']}""", in_reply_to_tweet_id=updatetwt_1.data['id'])
+현재 X 매치
+맵 : {', '.join(cur_schedule['xmatch']['stages'])}
+규칙 : {cur_schedule['xmatch']['rule']}""", in_reply_to_tweet_id=updatetwt_1.data['id'])
         except Exception as e:
             print(e)
             pass

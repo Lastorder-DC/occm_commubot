@@ -57,6 +57,7 @@ cur_schedule = get_schedules(locale)
 cur_salmon = cur_schedule["salmon"]
 cur_event = None
 next_event = None
+cur_fest = None
 
 BASE = os.getenv('MASTODON_BASE')
 
@@ -75,7 +76,21 @@ def detect_schedule_change():
     global cur_salmon
     global cur_event
     global next_event
+    global cur_fest
     new_schedule = get_schedules(locale)
+    
+    if cur_fest != new_schedule["fest"] and new_schedule["fest"] is not None:
+        cur_fest = new_schedule["fest"]
+        client.create_tweet(text=f"""페스티벌이 시작되었다!
+{cur_schedule["fest"]["title"]}
+{cur_schedule["fest"]["time"]["start"]} ~ {cur_schedule["fest"]["time"]["end"]}
+
+', '.join(cur_schedule["fest"]["teams"]) 중 당신의 선택은?""")
+        m.status_post(f"""페스티벌이 시작되었다!
+{cur_schedule["fest"]["title"]}
+{cur_schedule["fest"]["time"]["start"]} ~ {cur_schedule["fest"]["time"]["end"]}
+
+:Splatfest_S9_Shiver: 후우카 :Splatfest_S9_Frye: 우츠호 :Splatfest_S9_BigMan: 만타로 중 당신의 선택은?""", visibility=default_visibility)
 
     if cur_schedule != new_schedule:
         cur_schedule = new_schedule
@@ -127,7 +142,7 @@ def detect_schedule_change():
 {cur_schedule['regular']['time']['start']} ~ {cur_schedule['regular']['time']['end']}
 
 페스티벌 진행중!
-{cur_schedule["fest"]["title"]}
+:Splatfest_S9_Shiver: :Splatfest_S9_Frye: :Splatfest_S9_BigMan: {cur_schedule["fest"]["title"]}
 {cur_schedule["fest"]["time"]["start"]} ~ {cur_schedule["fest"]["time"]["end"]}""")
                 client.create_tweet(text=f"""페스티벌 매치 (오픈)
 맵 : {', '.join(cur_schedule['open']['stages'])}
@@ -300,10 +315,13 @@ class Listener(StreamListener):
 규칙 : {next_next_schedules['regular']['rule']}""", in_reply_to_id=notification['status']['id'], visibility=default_visibility)
                 elif result[0] == "%챌린지%":
                     if cur_schedule["fest"] is None:
-                        match_type = "카오폴리스 매치 챌린지"
+                        match_type = ":EtcLogo_Ranked_Battle: 현재 카오폴리스 매치 챌린지"
                     else:
-                        match_type = "페스티벌 매치 (챌린지)"
-                    m.status_post(f"""@{notification['status']['account']['acct']} :EtcLogo_Ranked_Battle: 현재 {match_type}
+                        match_type = ":EtcLogo_Splatfest: 현재 페스티벌 매치 (챌린지)"
+                    m.status_post(f"""@{notification['status']['account']['acct']} 페스티벌 진행중!
+:Splatfest_S9_Shiver: :Splatfest_S9_Frye: :Splatfest_S9_BigMan: {cur_schedule["fest"]["title"]}
+
+{match_type}
 {schedules['challenge']['time']['start']} ~ {schedules['challenge']['time']['end']}
 
 맵 : {', '.join(schedules['challenge']['stages'])}
@@ -323,10 +341,13 @@ class Listener(StreamListener):
 규칙 : {next_next_schedules['challenge']['rule']}""", in_reply_to_id=notification['status']['id'], visibility=default_visibility)
                 elif result[0] == "%오픈%":
                     if cur_schedule["fest"] is None:
-                        match_type = "카오폴리스 매치 챌린지"
+                        match_type = ":EtcLogo_Ranked_Battle: 현재 카오폴리스 매치 챌린지"
                     else:
-                        match_type = "페스티벌 매치 (챌린지)"
-                    m.status_post(f"""@{notification['status']['account']['acct']} :EtcLogo_Ranked_Battle: 현재 {match_type}
+                        match_type = ":EtcLogo_Splatfest: 현재 페스티벌 매치 (챌린지)"
+                    m.status_post(f"""@{notification['status']['account']['acct']} 페스티벌 진행중!
+:Splatfest_S9_Shiver: :Splatfest_S9_Frye: :Splatfest_S9_BigMan: {cur_schedule["fest"]["title"]}
+
+{match_type}
 {schedules['open']['time']['start']} ~ {schedules['open']['time']['end']}
 
 맵 : {', '.join(schedules['open']['stages'])}

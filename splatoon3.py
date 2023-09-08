@@ -339,21 +339,26 @@ def get_schedules(locale, target="NOW"):
         }
 
     current_fest = None
+    next_fest = None
     if schedules_db["data"]["currentFest"] is not None:
         if schedules_db["data"]["currentFest"]["id"] == "RmVzdC1VUzpKVUVBLTAwMDA5":
-            if convert_time(schedules_db["data"]["currentFest"]["startTime"]) <= current_time < convert_time(schedules_db["data"]["currentFest"]["endTime"]):
-                current_fest = {
-                    "title": f":Splatfest_S9_Shiver: :Splatfest_S9_Frye: :Splatfest_S9_BigMan:  {locale_db['festivals']['JUEA-00009']['title']}",
-                    "teams": [team['teamName'] for team in locale_db["festivals"]["JUEA-00009"]['teams']],
-                    "state": schedules_db["data"]["currentFest"]["state"],
-                    "time": {
-                        "start": convert_time_to_readable(schedules_db["data"]["currentFest"]["startTime"]),
-                        "end": convert_time_to_readable(schedules_db["data"]["currentFest"]["endTime"])
-                    }
+            fest = {
+                "title": f":Splatfest_S9_Shiver: :Splatfest_S9_Frye: :Splatfest_S9_BigMan:  {locale_db['festivals']['JUEA-00009']['title']}",
+                "teams": [team['teamName'] for team in locale_db["festivals"]["JUEA-00009"]['teams']],
+                "state": schedules_db["data"]["currentFest"]["state"],
+                "time": {
+                    "start": convert_time_to_readable(schedules_db["data"]["currentFest"]["startTime"]),
+                    "end": convert_time_to_readable(schedules_db["data"]["currentFest"]["endTime"])
                 }
+            }
+            if convert_time(schedules_db["data"]["currentFest"]["startTime"]) <= current_time < convert_time(schedules_db["data"]["currentFest"]["endTime"]):
+                current_fest = fest
+            else:
+                next_fest = fest
 
     return {
         "fest": current_fest,
+        "next_fest": next_fest,
         "regular": {
             "stages": regular_vs_stages,
             "images": regular_vs_images,
@@ -390,4 +395,4 @@ def get_schedules(locale, target="NOW"):
     }
 
 if __name__ == '__main__':
-    print(get_schedules("ko-KR", "NEXT"))
+    print(get_schedules("ko-KR"))

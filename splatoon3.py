@@ -47,16 +47,33 @@ def convert_time_to_readable(timestr):
     return output_string
 
 # 해당 스케줄에서 vsStages와 vsRule 추출
-def extract_info(type, schedule, locale_db):
+def extract_info(type, schedule, locale_db, fest_schedule=None):
     vs_stages = []
     vs_images = []
     vs_rule = None
 
-    if schedule is None and type == "EVENT":
+    if type == "EVENT" and schedule is None:
         vs_rule = {
                 "type": None,
                 "rules": None
             }
+
+    # 페스티벌중 레귤러 매치, x매치 미진행
+    if type == "REGULAR" and schedule["regularMatchSetting"] is None:
+        return vs_stages, vs_images, vs_rule
+    if type == "X" and schedule["xMatchSetting"] is None:
+        return vs_stages, vs_images, vs_rule
+        
+    # 페스티벌중 오픈, 챌린지
+    if type in ["CHALLENGE", "OPEN"] and schedule["bankaraMatchSettings"] is None:
+        if fest_schedule:
+            for fest_match_setting in fest_schedule["festMatchSettings"]:
+                if fest_match_setting["festMode"] == type:
+                    vs_stages = [get_stage_name(locale_db, stage["id"]) for stage in fest_match_setting["vsStages"]]
+                    vs_images = [stage["image"]["url"] for stage in fest_match_setting["vsStages"]]
+                    vs_rule = get_rules_name(locale_db, fest_match_setting["vsRule"]["id"])
+                    break
+        return vs_stages, vs_images, vs_rule
     
     if type == "REGULAR":
         vs_stages = [get_stage_name(locale_db, stage["id"]) for stage in schedule["regularMatchSetting"]["vsStages"]]
@@ -191,6 +208,16 @@ def get_schedules(locale, target="NOW"):
             }
             bankara_open_vs_time = bankara_challenge_vs_time
             break
+    
+    # 페스티벌 스케쥴
+    fest_schedule = None
+    try:
+        for schedule in schedules_db["data"]["festSchedules"]["nodes"]:
+            if convert_time(schedule["startTime"]) <= current_time < convert_time(schedule["endTime"]):
+                fest_schedule = schedule
+                break
+    except Exception:
+        pass
 
     # 현재 시간에 해당하는 xSchedules 찾기
     current_x_schedule = None
@@ -277,8 +304,8 @@ def get_schedules(locale, target="NOW"):
                     break
     
     regular_vs_stages, regular_vs_images, regular_vs_rule = extract_info("REGULAR", current_regular_schedule, locale_db)
-    bankara_challenge_vs_stages, bankara_challenge_vs_images, bankara_challenge_vs_rule  = extract_info("CHALLENGE", current_bankara_schedule, locale_db)
-    bankara_open_vs_stages, bankara_open_vs_images, bankara_open_vs_rule = extract_info("OPEN", current_bankara_schedule, locale_db)
+    bankara_challenge_vs_stages, bankara_challenge_vs_images, bankara_challenge_vs_rule  = extract_info("CHALLENGE", current_bankara_schedule, locale_db, fest_schedule)
+    bankara_open_vs_stages, bankara_open_vs_images, bankara_open_vs_rule = extract_info("OPEN", current_bankara_schedule, locale_db, fest_schedule)
     x_vs_stages, x_vs_images, x_vs_rule = extract_info("X", current_x_schedule, locale_db)
     if target == "NEXT":
         salmon_stages, salmon_images, salmon_info = extract_info("SALMON", next_salmon_schedule, locale_db)
@@ -311,7 +338,22 @@ def get_schedules(locale, target="NOW"):
             "time": upcoming_event_time
         }
 
+    current_fest = None
+    if schedules_db["data"]["currentFest"] is not None:
+        if schedules_db["data"]["currentFest"]["id"] == "RmVzdC1VUzpKVUVBLTAwMDA5":
+            if convert_time(schedules_db["data"]["currentFest"]["startTime"]) <= current_time < convert_time(schedules_db["data"]["currentFest"]["endTime"]):
+                current_fest = {
+                    "title": f":Splatfest_S9_Shiver: :Splatfest_S9_Frye: :Splatfest_S9_BigMan:  {locale_db['festivals']['JUEA-00009']['title']}",
+                    "teams": [team['teamName'] for team in locale_db["festivals"]["JUEA-00009"]['teams']],
+                    "state": schedules_db["data"]["currentFest"]["state"],
+                    "time": {
+                        "start": convert_time_to_readable(schedules_db["data"]["currentFest"]["startTime"]),
+                        "end": convert_time_to_readable(schedules_db["data"]["currentFest"]["endTime"])
+                    }
+                }
+
     return {
+        "fest": current_fest,
         "regular": {
             "stages": regular_vs_stages,
             "images": regular_vs_images,
@@ -348,4 +390,4 @@ def get_schedules(locale, target="NOW"):
     }
 
 if __name__ == '__main__':
-    print(get_schedules("ko-KR"))
+    print(get_schedules("ko-KR", "NEXT"))

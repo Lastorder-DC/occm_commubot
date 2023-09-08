@@ -79,9 +79,12 @@ def detect_schedule_change():
 
     if cur_schedule != new_schedule:
         cur_schedule = new_schedule
-        try:
-            updatetwt_1 = client.create_tweet(text=f"""스케쥴이 업데이트되었습니다.
-    {cur_schedule['regular']['time']['start']} ~ {cur_schedule['regular']['time']['end']}
+
+        # 페스티벌 미진행시
+        if cur_schedule["fest"] is None:
+            try:
+                updatetwt_1 = client.create_tweet(text=f"""스케쥴이 업데이트되었습니다.
+{cur_schedule['regular']['time']['start']} ~ {cur_schedule['regular']['time']['end']}
 
 현재 레귤러 매치
 맵 : {', '.join(cur_schedule['regular']['stages'])}
@@ -90,17 +93,17 @@ def detect_schedule_change():
 현재 카오폴리스 매치 챌린지
 맵 : {', '.join(cur_schedule['challenge']['stages'])}
 규칙 : {cur_schedule['challenge']['rule']}""")
-            client.create_tweet(text=f"""현재 카오폴리스 매치 오픈
+                client.create_tweet(text=f"""현재 카오폴리스 매치 오픈
 맵 : {', '.join(cur_schedule['open']['stages'])}
 규칙 : {cur_schedule['open']['rule']}
 
 현재 X 매치
 맵 : {', '.join(cur_schedule['xmatch']['stages'])}
 규칙 : {cur_schedule['xmatch']['rule']}""", in_reply_to_tweet_id=updatetwt_1.data['id'])
-        except Exception as e:
-            print(e)
-            pass
-        m.status_post(f"""스케쥴이 업데이트되었습니다.
+            except Exception as e:
+                print(e)
+                pass
+            m.status_post(f"""스케쥴이 업데이트되었습니다.
 {cur_schedule['regular']['time']['start']} ~ {cur_schedule['regular']['time']['end']}
 
 :EtcLogo_Regular_Battle: 현재 레귤러 매치
@@ -118,6 +121,42 @@ def detect_schedule_change():
 :EtcLogo_X_Battle: 현재 X 매치
 맵 : {', '.join(cur_schedule['xmatch']['stages'])}
 규칙 : {cur_schedule['xmatch']['rule']}""", visibility=default_visibility)
+        else:
+            try:
+                updatetwt_1 = client.create_tweet(text=f"""스케쥴이 업데이트되었습니다.
+{cur_schedule['regular']['time']['start']} ~ {cur_schedule['regular']['time']['end']}
+
+페스티벌 진행중!
+{cur_schedule["fest"]["title"]}
+{cur_schedule["fest"]["time"]["start"]} ~ {cur_schedule["fest"]["time"]["end"]}""")
+                client.create_tweet(text=f"""페스티벌 매치 (오픈)
+맵 : {', '.join(cur_schedule['open']['stages'])}
+규칙 : {cur_schedule['open']['rule']}
+
+페스티벌 매치 (챌린지)
+맵 : {', '.join(cur_schedule['challenge']['stages'])}
+규칙 : {cur_schedule['challenge']['rule']}
+
+현재 X 매치
+맵 : {', '.join(cur_schedule['xmatch']['stages'])}
+규칙 : {cur_schedule['xmatch']['rule']}""", in_reply_to_tweet_id=updatetwt_1.data['id'])
+            except Exception as e:
+                print(e)
+                pass
+            m.status_post(f"""스케쥴이 업데이트되었습니다.
+{cur_schedule['regular']['time']['start']} ~ {cur_schedule['regular']['time']['end']}
+
+페스티벌 진행중!
+{cur_schedule["fest"]["title"]}
+{cur_schedule["fest"]["time"]["start"]} ~ {cur_schedule["fest"]["time"]["end"]}
+
+:EtcLogo_Splatfest: 페스티벌 매치 (오픈)
+맵 : {', '.join(cur_schedule['open']['stages'])}
+규칙 : {cur_schedule['open']['rule']}
+
+:EtcLogo_Splatfest: 페스티벌 매치 (챌린지)
+맵 : {', '.join(cur_schedule['challenge']['stages'])}
+규칙 : {cur_schedule['challenge']['rule']}""", visibility=default_visibility)
         
     if cur_salmon != new_schedule["salmon"]:
         cur_salmon = new_schedule["salmon"]
@@ -241,7 +280,10 @@ class Listener(StreamListener):
 
                 # 현재 스케쥴 요청
                 if result[0] == "%영배%":
-                    m.status_post(f"""@{notification['status']['account']['acct']} :EtcLogo_Regular_Battle: 현재 레귤러 매치
+                    if cur_schedule["fest"] is not None:
+                        m.status_post(f"@{notification['status']['account']['acct']} 현재 페스티벌 진행중으로 레귤러 매치는 잠시 쉬는 중!", in_reply_to_id=notification['status']['id'], visibility=default_visibility)
+                    else:
+                        m.status_post(f"""@{notification['status']['account']['acct']} :EtcLogo_Regular_Battle: 현재 레귤러 매치
 {schedules['regular']['time']['start']} ~ {schedules['regular']['time']['end']}
 
 맵 : {', '.join(schedules['regular']['stages'])}
@@ -261,7 +303,11 @@ class Listener(StreamListener):
 맵 : {', '.join(next_next_schedules['regular']['stages'])}
 규칙 : {next_next_schedules['regular']['rule']}""", in_reply_to_id=notification['status']['id'], visibility=default_visibility)
                 elif result[0] == "%챌린지%":
-                    m.status_post(f"""@{notification['status']['account']['acct']} :EtcLogo_Ranked_Battle: 현재 카오폴리스 매치 챌린지
+                    if cur_schedule["fest"] is None:
+                        match_type = "카오폴리스 매치 챌린지"
+                    else:
+                        match_type = "페스티벌 매치 (챌린지)"
+                    m.status_post(f"""@{notification['status']['account']['acct']} :EtcLogo_Ranked_Battle: 현재 {match_type}
 {schedules['challenge']['time']['start']} ~ {schedules['challenge']['time']['end']}
 
 맵 : {', '.join(schedules['challenge']['stages'])}
@@ -280,7 +326,11 @@ class Listener(StreamListener):
 맵 : {', '.join(next_next_schedules['challenge']['stages'])}
 규칙 : {next_next_schedules['challenge']['rule']}""", in_reply_to_id=notification['status']['id'], visibility=default_visibility)
                 elif result[0] == "%오픈%":
-                    m.status_post(f"""@{notification['status']['account']['acct']} :EtcLogo_Ranked_Battle: 현재 카오폴리스 매치 오픈
+                    if cur_schedule["fest"] is None:
+                        match_type = "카오폴리스 매치 챌린지"
+                    else:
+                        match_type = "페스티벌 매치 (챌린지)"
+                    m.status_post(f"""@{notification['status']['account']['acct']} :EtcLogo_Ranked_Battle: 현재 {match_type}
 {schedules['open']['time']['start']} ~ {schedules['open']['time']['end']}
 
 맵 : {', '.join(schedules['open']['stages'])}
@@ -300,7 +350,10 @@ class Listener(StreamListener):
 맵 : {', '.join(next_next_schedules['open']['stages'])}
 규칙 : {next_next_schedules['open']['rule']}""", in_reply_to_id=notification['status']['id'], visibility=default_visibility)
                 elif result[0] == "%엑스%":
-                    m.status_post(f"""@{notification['status']['account']['acct']} :EtcLogo_X_Battle: 현재 X 매치
+                    if cur_schedule["fest"] is not None:
+                        m.status_post(f"@{notification['status']['account']['acct']} 현재 페스티벌 진행중으로 X 매치는 잠시 쉬는 중!", in_reply_to_id=notification['status']['id'], visibility=default_visibility)
+                    else:
+                        m.status_post(f"""@{notification['status']['account']['acct']} :EtcLogo_X_Battle: 현재 X 매치
 {schedules['xmatch']['time']['start']} ~ {schedules['xmatch']['time']['end']}
 
 맵 : {', '.join(schedules['xmatch']['stages'])}

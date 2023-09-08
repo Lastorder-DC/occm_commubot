@@ -135,11 +135,7 @@ def detect_schedule_change():
 
 페스티벌 매치 (챌린지)
 맵 : {', '.join(cur_schedule['challenge']['stages'])}
-규칙 : {cur_schedule['challenge']['rule']}
-
-현재 X 매치
-맵 : {', '.join(cur_schedule['xmatch']['stages'])}
-규칙 : {cur_schedule['xmatch']['rule']}""", in_reply_to_tweet_id=updatetwt_1.data['id'])
+규칙 : {cur_schedule['challenge']['rule']}""", in_reply_to_tweet_id=updatetwt_1.data['id'])
             except Exception as e:
                 print(e)
                 pass

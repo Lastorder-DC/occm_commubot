@@ -344,9 +344,9 @@ class Listener(StreamListener):
 규칙 : {next_next_schedules['challenge']['rule']}""", in_reply_to_id=notification['status']['id'], visibility=default_visibility)
                 elif result[0] == "%오픈%":
                     if cur_schedule["fest"] is None:
-                        match_type = ":EtcLogo_Ranked_Battle: 현재 카오폴리스 매치 챌린지"
+                        match_type = ":EtcLogo_Ranked_Battle: 현재 카오폴리스 매치 오픈"
                     else:
-                        match_type = ":EtcLogo_Splatfest: 현재 페스티벌 매치 (챌린지)"
+                        match_type = ":EtcLogo_Splatfest: 현재 페스티벌 매치 (오픈)"
                     m.status_post(f"""@{notification['status']['account']['acct']} 페스티벌 진행중!
 :Splatfest_S9_Shiver: :Splatfest_S9_Frye: :Splatfest_S9_BigMan: {cur_schedule["fest"]["title"]}
 

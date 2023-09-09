@@ -143,7 +143,7 @@ def detect_schedule_change():
 {cur_schedule['regular']['time']['start']} ~ {cur_schedule['regular']['time']['end']}
 
 페스티벌 진행중!
-:Splatfest_S9_Shiver: :Splatfest_S9_Frye: :Splatfest_S9_BigMan: {cur_schedule["fest"]["title"]}
+{cur_schedule["fest"]["title"]}
 {cur_schedule["fest"]["time"]["start"]} ~ {cur_schedule["fest"]["time"]["end"]}""")
                 client.create_tweet(text=f"""페스티벌 매치 (오픈)
 맵 : {', '.join(cur_schedule['open']['stages'])}
@@ -159,7 +159,7 @@ def detect_schedule_change():
 {cur_schedule['regular']['time']['start']} ~ {cur_schedule['regular']['time']['end']}
 
 페스티벌 진행중!
-{cur_schedule["fest"]["title"]}
+:Splatfest_S9_Shiver: :Splatfest_S9_Frye: :Splatfest_S9_BigMan: {cur_schedule["fest"]["title"]}
 {cur_schedule["fest"]["time"]["start"]} ~ {cur_schedule["fest"]["time"]["end"]}
 
 :EtcLogo_Splatfest: 페스티벌 매치 (오픈)

@@ -58,6 +58,7 @@ cur_salmon = cur_schedule["salmon"]
 cur_event = None
 next_event = None
 cur_fest = None
+cur_schedule = None
 
 BASE = os.getenv('MASTODON_BASE')
 

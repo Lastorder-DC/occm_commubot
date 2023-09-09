@@ -66,6 +66,8 @@ def extract_info(type, schedule, locale_db, fest_schedule=None):
         
     # 페스티벌중 오픈, 챌린지
     if type in ["CHALLENGE", "OPEN"] and schedule["bankaraMatchSettings"] is None:
+        if type == "OPEN":
+            type = "REGULAR"
         if fest_schedule:
             for fest_match_setting in fest_schedule["festMatchSettings"]:
                 if fest_match_setting["festMode"] == type:
@@ -395,4 +397,10 @@ def get_schedules(locale, target="NOW"):
     }
 
 if __name__ == '__main__':
-    print(get_schedules("ko-KR"))
+    result = get_schedules("ko-KR")
+    print(result["fest"])
+    print("============")
+    print(result["open"])
+    print("============")
+    print(result["challenge"])
+    print("============")

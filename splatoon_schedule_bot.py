@@ -58,6 +58,9 @@ cur_salmon = cur_schedule["salmon"]
 cur_event = None
 next_event = None
 cur_fest = cur_schedule["fest"]
+cur_fest_status = None
+if cur_fest is not None:
+    cur_fest_status = cur_schedule["fest"]["state"]
 
 BASE = os.getenv('MASTODON_BASE')
 
@@ -77,23 +80,51 @@ def detect_schedule_change():
     global cur_event
     global next_event
     global cur_fest
+    global cur_fest_status
     new_schedule = get_schedules(locale)
     
-    if cur_fest != new_schedule["fest"] and new_schedule["fest"] is not None:
-        cur_fest = new_schedule["fest"]
-        try:
-            client.create_tweet(text=f"""페스티벌이 시작되었다!
+    if cur_fest_status != new_schedule["fest"]["state"]:
+        old_fest_status = cur_fest_status
+        cur_fest_status = new_schedule["fest"]["state"]
+        if cur_fest_status == "FIRST_HALF":
+            try:
+                client.create_tweet(text=f"""페스티벌이 시작되었다!
 {new_schedule["fest"]["title"]}
 {new_schedule["fest"]["time"]["start"]} ~ {new_schedule["fest"]["time"]["end"]}
 
 {', '.join(new_schedule["fest"]["teams"])} 중 당신의 선택은?""")
-        except Exception:
-            pass
-        m.status_post(f"""페스티벌이 시작되었다!
+            except Exception:
+                pass
+            m.status_post(f"""페스티벌이 시작되었다!
 {new_schedule["fest"]["title"]}
 {new_schedule["fest"]["time"]["start"]} ~ {new_schedule["fest"]["time"]["end"]}
 
 :Splatfest_S9_Shiver: 후우카 :Splatfest_S9_Frye: 우츠호 :Splatfest_S9_BigMan: 만타로 중 당신의 선택은?""", visibility=default_visibility)
+        elif cur_fest_status == "SECOND_HALF":
+            try:
+                client.create_tweet(text=f"""페스티벌 중간 결과 공개!
+{new_schedule["fest"]["title"]}
+{new_schedule["fest"]["time"]["start"]} ~ {new_schedule["fest"]["time"]["end"]}
+
+이번 시즌 트리컬러 배틀 맵은 랜덤
+그동안 진행했던 트리컬러 배틀 맵 중 임의로 선택된다!
+
+트리컬러 배틀로 선택한 팀을 응원하자!""")
+            except Exception:
+                pass
+            m.status_post(f"""페스티벌 중간 결과 공개!
+:Splatfest_S9_Shiver: :Splatfest_S9_Frye: :Splatfest_S9_BigMan: {new_schedule["fest"]["title"]}
+{new_schedule["fest"]["time"]["start"]} ~ {new_schedule["fest"]["time"]["end"]}
+
+트리컬러 배틀로 선택한 팀을 응원하자!""", visibility=default_visibility)
+        elif old_fest_status is not None and cur_fest_status is None:
+            try:
+                client.create_tweet(text=f"""페스티벌 종료!
+{new_schedule["fest"]["title"]}""")
+            except Exception:
+                pass
+            m.status_post(f"""페스티벌 종료!
+:Splatfest_S9_Shiver: :Splatfest_S9_Frye: :Splatfest_S9_BigMan: {new_schedule["fest"]["title"]}""", visibility=default_visibility)
 
     if cur_schedule != new_schedule:
         cur_schedule = new_schedule

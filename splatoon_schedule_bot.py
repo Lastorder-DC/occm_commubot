@@ -82,11 +82,14 @@ def detect_schedule_change():
     
     if cur_fest != new_schedule["fest"] and new_schedule["fest"] is not None:
         cur_fest = new_schedule["fest"]
-        client.create_tweet(text=f"""페스티벌이 시작되었다!
+        try:
+            client.create_tweet(text=f"""페스티벌이 시작되었다!
 {new_schedule["fest"]["title"]}
 {new_schedule["fest"]["time"]["start"]} ~ {new_schedule["fest"]["time"]["end"]}
 
-', '.join(new_schedule["fest"]["teams"]) 중 당신의 선택은?""")
+{', '.join(new_schedule["fest"]["teams"])} 중 당신의 선택은?""")
+        except Exception:
+            pass
         m.status_post(f"""페스티벌이 시작되었다!
 {new_schedule["fest"]["title"]}
 {new_schedule["fest"]["time"]["start"]} ~ {new_schedule["fest"]["time"]["end"]}

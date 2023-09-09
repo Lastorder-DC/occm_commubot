@@ -83,13 +83,13 @@ def detect_schedule_change():
     if cur_fest != new_schedule["fest"] and new_schedule["fest"] is not None:
         cur_fest = new_schedule["fest"]
         client.create_tweet(text=f"""페스티벌이 시작되었다!
-{cur_schedule["fest"]["title"]}
-{cur_schedule["fest"]["time"]["start"]} ~ {cur_schedule["fest"]["time"]["end"]}
+{new_schedule["fest"]["title"]}
+{new_schedule["fest"]["time"]["start"]} ~ {new_schedule["fest"]["time"]["end"]}
 
-', '.join(cur_schedule["fest"]["teams"]) 중 당신의 선택은?""")
+', '.join(new_schedule["fest"]["teams"]) 중 당신의 선택은?""")
         m.status_post(f"""페스티벌이 시작되었다!
-{cur_schedule["fest"]["title"]}
-{cur_schedule["fest"]["time"]["start"]} ~ {cur_schedule["fest"]["time"]["end"]}
+{new_schedule["fest"]["title"]}
+{new_schedule["fest"]["time"]["start"]} ~ {new_schedule["fest"]["time"]["end"]}
 
 :Splatfest_S9_Shiver: 후우카 :Splatfest_S9_Frye: 우츠호 :Splatfest_S9_BigMan: 만타로 중 당신의 선택은?""", visibility=default_visibility)
 

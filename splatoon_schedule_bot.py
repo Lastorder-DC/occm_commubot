@@ -82,8 +82,18 @@ def detect_schedule_change():
     global cur_fest
     global cur_fest_status
     new_schedule = get_schedules(locale)
+
+    # TODO : Remove Hack(title hardcoding, icon, etc)
+    if False:
+        try:
+            client.create_tweet(text=f"""페스티벌 종료!
+리더에 어울리는 건 누구?""")
+        except Exception:
+            pass
+        m.status_post(f"""페스티벌 종료!
+:Splatfest_S9_Shiver: :Splatfest_S9_Frye: :Splatfest_S9_BigMan: 리더에 어울리는 건 누구?""", visibility=default_visibility)
     
-    if cur_fest_status != new_schedule["fest"]["state"]:
+    if new_schedule["fest"] is not None and  cur_fest_status != new_schedule["fest"]["state"]:
         old_fest_status = cur_fest_status
         cur_fest_status = new_schedule["fest"]["state"]
         if cur_fest_status == "FIRST_HALF":
@@ -117,14 +127,6 @@ def detect_schedule_change():
 {new_schedule["fest"]["time"]["start"]} ~ {new_schedule["fest"]["time"]["end"]}
 
 트리컬러 배틀로 선택한 팀을 응원하자!""", visibility=default_visibility)
-        elif old_fest_status is not None and cur_fest_status is None:
-            try:
-                client.create_tweet(text=f"""페스티벌 종료!
-{new_schedule["fest"]["title"]}""")
-            except Exception:
-                pass
-            m.status_post(f"""페스티벌 종료!
-:Splatfest_S9_Shiver: :Splatfest_S9_Frye: :Splatfest_S9_BigMan: {new_schedule["fest"]["title"]}""", visibility=default_visibility)
 
     if cur_schedule != new_schedule:
         cur_schedule = new_schedule

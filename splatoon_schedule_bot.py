@@ -91,7 +91,7 @@ def detect_schedule_change():
         except Exception:
             pass
         m.status_post(f"""페스티벌 종료!
-:Splatfest_S9_Shiver: :Splatfest_S9_Frye: :Splatfest_S9_BigMan: 리더에 어울리는 건 누구?""", visibility=default_visibility)
+:S3_Splatfest_Icon_Friends: :S3_Splatfest_Icon_Family: :S3_Splatfest_Icon_Solo: 쉬는 날에는?""", visibility=default_visibility)
     
     if new_schedule["fest"] is not None and  cur_fest_status != new_schedule["fest"]["state"]:
         old_fest_status = cur_fest_status
@@ -109,23 +109,22 @@ def detect_schedule_change():
 {new_schedule["fest"]["title"]}
 {new_schedule["fest"]["time"]["start"]} ~ {new_schedule["fest"]["time"]["end"]}
 
-:Splatfest_S9_Shiver: 후우카 :Splatfest_S9_Frye: 우츠호 :Splatfest_S9_BigMan: 만타로 중 당신의 선택은?""", visibility=default_visibility)
+:S3_Splatfest_Icon_Friends: 친구와 왁자지껄 :S3_Splatfest_Icon_Family: 가족과 오손도손 :S3_Splatfest_Icon_Solo: 혼자서 유유자적 중 당신의 선택은?""", visibility=default_visibility)
         elif cur_fest_status == "SECOND_HALF":
             try:
                 client.create_tweet(text=f"""페스티벌 중간 결과 공개!
 {new_schedule["fest"]["title"]}
 {new_schedule["fest"]["time"]["start"]} ~ {new_schedule["fest"]["time"]["end"]}
 
-이번 시즌 트리컬러 배틀 맵은 랜덤
-그동안 진행했던 트리컬러 배틀 맵 중 임의로 선택된다!
-
+이번 시즌 트리컬러 배틀 맵은 거미게 경제특구!
 트리컬러 배틀로 선택한 팀을 응원하자!""")
             except Exception:
                 pass
             m.status_post(f"""페스티벌 중간 결과 공개!
-:Splatfest_S9_Shiver: :Splatfest_S9_Frye: :Splatfest_S9_BigMan: {new_schedule["fest"]["title"]}
+:S3_Splatfest_Icon_Friends: :S3_Splatfest_Icon_Family: :S3_Splatfest_Icon_Solo: {new_schedule["fest"]["title"]}
 {new_schedule["fest"]["time"]["start"]} ~ {new_schedule["fest"]["time"]["end"]}
 
+이번 시즌 트리컬러 배틀 맵은 거미게 경제특구!
 트리컬러 배틀로 선택한 팀을 응원하자!""", visibility=default_visibility)
 
     if cur_schedule != new_schedule:

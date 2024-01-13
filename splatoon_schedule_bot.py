@@ -193,7 +193,7 @@ def detect_schedule_change():
 {cur_schedule['regular']['time']['start']} ~ {cur_schedule['regular']['time']['end']}
 
 페스티벌 진행중!
-:Splatfest_S9_Shiver: :Splatfest_S9_Frye: :Splatfest_S9_BigMan: {cur_schedule["fest"]["title"]}
+:S3_Splatfest_Icon_Friends: :S3_Splatfest_Icon_Family: :S3_Splatfest_Icon_Solo: {cur_schedule["fest"]["title"]}
 {cur_schedule["fest"]["time"]["start"]} ~ {cur_schedule["fest"]["time"]["end"]}
 
 :EtcLogo_Splatfest: 페스티벌 매치 (오픈)
@@ -354,7 +354,7 @@ class Listener(StreamListener):
                     else:
                         match_type = ":EtcLogo_Splatfest: 현재 페스티벌 매치 (챌린지)"
                     m.status_post(f"""@{notification['status']['account']['acct']} 페스티벌 진행중!
-:Splatfest_S9_Shiver: :Splatfest_S9_Frye: :Splatfest_S9_BigMan: {cur_schedule["fest"]["title"]}
+:S3_Splatfest_Icon_Friends: :S3_Splatfest_Icon_Family: :S3_Splatfest_Icon_Solo: {cur_schedule["fest"]["title"]}
 
 {match_type}
 {schedules['challenge']['time']['start']} ~ {schedules['challenge']['time']['end']}
@@ -380,7 +380,7 @@ class Listener(StreamListener):
                     else:
                         match_type = ":EtcLogo_Splatfest: 현재 페스티벌 매치 (오픈)"
                     m.status_post(f"""@{notification['status']['account']['acct']} 페스티벌 진행중!
-:Splatfest_S9_Shiver: :Splatfest_S9_Frye: :Splatfest_S9_BigMan: {cur_schedule["fest"]["title"]}
+:S3_Splatfest_Icon_Friends: :S3_Splatfest_Icon_Family: :S3_Splatfest_Icon_Solo: {cur_schedule["fest"]["title"]}
 
 {match_type}
 {schedules['open']['time']['start']} ~ {schedules['open']['time']['end']}

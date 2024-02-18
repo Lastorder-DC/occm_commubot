@@ -343,7 +343,7 @@ def get_schedules(locale, target="NOW"):
     current_fest = None
     next_fest = None
     if schedules_db["data"]["currentFest"] is not None:
-        if schedules_db["data"]["currentFest"]["id"] == "RmVzdC1VUzpKVUVBLTAwMDEy":
+        if schedules_db["data"]["currentFest"]["id"] == "RmVzdC1VUzpVRUEtMDAwMTM=":
             fest = {
                 "title": locale_db['festivals']['JUEA-00012']['title'],
                 "teams": [team['teamName'] for team in locale_db["festivals"]["JUEA-00012"]['teams']],

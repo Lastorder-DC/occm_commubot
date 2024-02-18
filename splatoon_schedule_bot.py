@@ -91,7 +91,7 @@ def detect_schedule_change():
         except Exception:
             pass
         m.status_post(f"""페스티벌 종료!
-:S3_Splatfest_Icon_Friends: :S3_Splatfest_Icon_Family: :S3_Splatfest_Icon_Solo: 쉬는 날에는?""", visibility=default_visibility)
+:S3_Splatfest_Icon_Friday: :S3_Splatfest_Icon_Saturday: :S3_Splatfest_Icon_Sunday: 쉬는 날에는?""", visibility=default_visibility)
     
     if new_schedule["fest"] is not None and  cur_fest_status != new_schedule["fest"]["state"]:
         old_fest_status = cur_fest_status
@@ -121,7 +121,7 @@ def detect_schedule_change():
             except Exception:
                 pass
             m.status_post(f"""페스티벌 중간 결과 공개!
-:S3_Splatfest_Icon_Friends: :S3_Splatfest_Icon_Family: :S3_Splatfest_Icon_Solo: {new_schedule["fest"]["title"]}
+:S3_Splatfest_Icon_Friday: :S3_Splatfest_Icon_Saturday: :S3_Splatfest_Icon_Sunday: {new_schedule["fest"]["title"]}
 {new_schedule["fest"]["time"]["start"]} ~ {new_schedule["fest"]["time"]["end"]}
 
 이번 시즌 트리컬러 배틀 맵은 거미게 경제특구!
@@ -193,7 +193,7 @@ def detect_schedule_change():
 {cur_schedule['regular']['time']['start']} ~ {cur_schedule['regular']['time']['end']}
 
 페스티벌 진행중!
-:S3_Splatfest_Icon_Friends: :S3_Splatfest_Icon_Family: :S3_Splatfest_Icon_Solo: {cur_schedule["fest"]["title"]}
+:S3_Splatfest_Icon_Friday: :S3_Splatfest_Icon_Saturday: :S3_Splatfest_Icon_Sunday: {cur_schedule["fest"]["title"]}
 {cur_schedule["fest"]["time"]["start"]} ~ {cur_schedule["fest"]["time"]["end"]}
 
 :EtcLogo_Splatfest: 페스티벌 매치 (오픈)
@@ -354,7 +354,7 @@ class Listener(StreamListener):
                     else:
                         match_type = ":EtcLogo_Splatfest: 현재 페스티벌 매치 (챌린지)"
                     m.status_post(f"""@{notification['status']['account']['acct']} 페스티벌 진행중!
-:S3_Splatfest_Icon_Friends: :S3_Splatfest_Icon_Family: :S3_Splatfest_Icon_Solo: {cur_schedule["fest"]["title"]}
+:S3_Splatfest_Icon_Friday: :S3_Splatfest_Icon_Saturday: :S3_Splatfest_Icon_Sunday: {cur_schedule["fest"]["title"]}
 
 {match_type}
 {schedules['challenge']['time']['start']} ~ {schedules['challenge']['time']['end']}
@@ -380,7 +380,7 @@ class Listener(StreamListener):
                     else:
                         match_type = ":EtcLogo_Splatfest: 현재 페스티벌 매치 (오픈)"
                     m.status_post(f"""@{notification['status']['account']['acct']} 페스티벌 진행중!
-:S3_Splatfest_Icon_Friends: :S3_Splatfest_Icon_Family: :S3_Splatfest_Icon_Solo: {cur_schedule["fest"]["title"]}
+:S3_Splatfest_Icon_Friday: :S3_Splatfest_Icon_Saturday: :S3_Splatfest_Icon_Sunday: {cur_schedule["fest"]["title"]}
 
 {match_type}
 {schedules['open']['time']['start']} ~ {schedules['open']['time']['end']}

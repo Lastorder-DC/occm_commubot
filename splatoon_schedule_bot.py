@@ -346,7 +346,10 @@ class Listener(StreamListener):
                 # 현재 스케쥴 요청
                 if result[0] == "%영배%":
                     if cur_schedule["fest"] is not None:
-                        m.status_post(f"@{notification['status']['account']['acct']} 현재 페스티벌 진행중으로 레귤러 매치는 잠시 쉬는 중!", in_reply_to_id=notification['status']['id'], visibility=default_visibility)
+                        m.status_post(f"""@{notification['status']['account']['acct']} 페스티벌 진행중!
+:S3F18F: :S3F18U: :S3F18M: {cur_schedule["fest"]["title"]}
+
+페스티벌 매치나 트리컬러 매치로 좋아하는 팀을 응원해보자!""", in_reply_to_id=notification['status']['id'], visibility=default_visibility)
                     else:
                         m.status_post(f"""@{notification['status']['account']['acct']} :EtcLogo_Regular_Battle: 현재 레귤러 매치
 {schedules['regular']['time']['start']} ~ {schedules['regular']['time']['end']}
@@ -368,15 +371,14 @@ class Listener(StreamListener):
 맵 : {', '.join(next_next_schedules['regular']['stages'])}
 규칙 : {next_next_schedules['regular']['rule']}""", in_reply_to_id=notification['status']['id'], visibility=default_visibility)
                 elif result[0] == "%챌린지%":
-                    print(cur_schedule)
                     if cur_schedule["fest"] is None:
                         match_type = ":EtcLogo_Ranked_Battle: 현재 카오폴리스 매치 챌린지"
                     else:
-                        match_type = ":EtcLogo_Splatfest: 현재 페스티벌 매치 (챌린지)"
-                    m.status_post(f"""@{notification['status']['account']['acct']} 페스티벌 진행중!
-:S3_Splatfest_Icon_Friday: :S3_Splatfest_Icon_Saturday: :S3_Splatfest_Icon_Sunday: {cur_schedule["fest"]["title"]}
+                        match_type = """페스티벌 진행중!
+:S3F18F: :S3F18U: :S3F18M: {cur_schedule["fest"]["title"]}
 
-{match_type}
+:EtcLogo_Splatfest: 현재 페스티벌 매치 (챌린지)"
+                    m.status_post(f"""@{notification['status']['account']['acct']} {match_type}
 {schedules['challenge']['time']['start']} ~ {schedules['challenge']['time']['end']}
 
 맵 : {', '.join(schedules['challenge']['stages'])}
@@ -398,11 +400,11 @@ class Listener(StreamListener):
                     if cur_schedule["fest"] is None:
                         match_type = ":EtcLogo_Ranked_Battle: 현재 카오폴리스 매치 오픈"
                     else:
-                        match_type = ":EtcLogo_Splatfest: 현재 페스티벌 매치 (오픈)"
-                    m.status_post(f"""@{notification['status']['account']['acct']} 페스티벌 진행중!
-:S3_Splatfest_Icon_Friday: :S3_Splatfest_Icon_Saturday: :S3_Splatfest_Icon_Sunday: {cur_schedule["fest"]["title"]}
+                        match_type = """페스티벌 진행중!
+:S3F18F: :S3F18U: :S3F18M: {cur_schedule["fest"]["title"]}
 
-{match_type}
+:EtcLogo_Splatfest: 현재 페스티벌 매치 (오픈)"
+                    m.status_post(f"""@{notification['status']['account']['acct']} {match_type}
 {schedules['open']['time']['start']} ~ {schedules['open']['time']['end']}
 
 맵 : {', '.join(schedules['open']['stages'])}
@@ -423,7 +425,10 @@ class Listener(StreamListener):
 규칙 : {next_next_schedules['open']['rule']}""", in_reply_to_id=notification['status']['id'], visibility=default_visibility)
                 elif result[0] == "%엑스%":
                     if cur_schedule["fest"] is not None:
-                        m.status_post(f"@{notification['status']['account']['acct']} 현재 페스티벌 진행중으로 X 매치는 잠시 쉬는 중!", in_reply_to_id=notification['status']['id'], visibility=default_visibility)
+                        m.status_post(f"""@{notification['status']['account']['acct']} 페스티벌 진행중!
+:S3F18F: :S3F18U: :S3F18M: {cur_schedule["fest"]["title"]}
+
+페스티벌 매치나 트리컬러 매치로 좋아하는 팀을 응원해보자!""", in_reply_to_id=notification['status']['id'], visibility=default_visibility)
                     else:
                         m.status_post(f"""@{notification['status']['account']['acct']} :EtcLogo_X_Battle: 현재 X 매치
 {schedules['xmatch']['time']['start']} ~ {schedules['xmatch']['time']['end']}

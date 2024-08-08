@@ -508,21 +508,30 @@ def main():
     version = "1.0.2"
 
     toots = m.account_statuses(bot.id)
-    if toots[0].content.find("봇 가동 시작") != -1:
-        reboot_msg = f"봇 재부팅(v{version}) : {formatted_time}"
-        new_content = f"""{toots[0].content}
-{reboot_msg}"""
-        new_content = new_content.replace("<p>","")
-        new_content = new_content.replace("</p>","")
-        new_content = new_content.replace("<br />", "\n")
-        new_content = new_content.replace("<br/>", "\n")
-        new_content = new_content.replace("<br>", "\n")
-        if len(new_content) > 2000:
-            m.status_post(reboot_msg, visibility=default_visibility)
-        else:
-            m.status_update(toots[0].id, new_content)
-    else:
-        m.status_post(f"봇 가동 시작(v{version}) : {formatted_time}", visibility=default_visibility)
+    new_toot = None
+    i = 0
+    for toot in toots:
+        i = i + 1
+        if i > 10:
+            break
+        
+        if toot.content.find("봇 가동 시작") != -1 and toot.account.id == bot.id:
+            reboot_msg = f"봇 재부팅(v{version}) : {formatted_time}"
+            old_content = toot.content
+            old_content = old_content.replace("<p>","")
+            old_content = old_content.replace("</p>","")
+            old_content = old_content.replace("<br />", "\n")
+            old_content = old_content.replace("<br/>", "\n")
+            old_content = old_content.replace("<br>", "\n")
+            new_content = f"""{old_content}
+    {reboot_msg}"""
+            
+            if len(new_content) > 2000:
+                new_toot = m.status_post(reboot_msg, in_reply_to_id=toot.id, visibility=default_visibility)
+            else:
+                new_toot = m.status_update(toot.id, new_content)
+    if new_toot is None:
+        new_toot = m.status_post(f"봇 가동 시작(v{version}) : {formatted_time}", visibility=default_visibility)
     try:
         m.stream_user(Listener(), run_async=True, reconnect_async=True, reconnect_async_wait_sec=10)
         while True:

@@ -368,6 +368,7 @@ class Listener(StreamListener):
 맵 : {', '.join(next_next_schedules['regular']['stages'])}
 규칙 : {next_next_schedules['regular']['rule']}""", in_reply_to_id=notification['status']['id'], visibility=default_visibility)
                 elif result[0] == "%챌린지%":
+                    print(cur_schedule["fest"])
                     if cur_schedule["fest"] is None:
                         match_type = ":EtcLogo_Ranked_Battle: 현재 카오폴리스 매치 챌린지"
                     else:

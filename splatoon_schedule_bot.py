@@ -513,6 +513,9 @@ def main():
 {reboot_msg}"""
         new_content = new_content.replace("<p>","")
         new_content = new_content.replace("</p>","")
+        new_content = new_content.replace("<br />", "\n")
+        new_content = new_content.replace("<br/>", "\n")
+        new_content = new_content.replace("<br>", "\n")
         if len(new_content) > 2000:
             m.status_post(reboot_msg, visibility=default_visibility)
         else:

@@ -499,7 +499,7 @@ def main():
     메인 함수로, Mastodon 스트리밍을 시작합니다.
     """
     toots = m.account_statuses(bot.id)
-    print(toots[0].content.find("봇 가동 시작 : "))
+    print(toots[0].content)
     if toots[0].content.find("봇 가동 시작 : ") != -1:
         m.status_delete(toots[0].id)
     return

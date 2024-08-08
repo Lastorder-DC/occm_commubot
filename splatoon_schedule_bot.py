@@ -506,10 +506,11 @@ def main():
             schedule.run_pending()
             sleep(1)
     except Exception:
-        m.status_post(f"@{admin_handle} 오류가 발생했습니다!
+        m.status_post(f"""@{admin_handle} 오류가 발생했습니다!
 
-{traceback.format_exc()}", visibility='private')
-        print(f"오류 발생! - {traceback.format_exc()}")
+{traceback.format_exc()}""", visibility='private')
+        print(f"""오류 발생!
+{traceback.format_exc()}"""
         sleep(10)
 
 if __name__ == '__main__':

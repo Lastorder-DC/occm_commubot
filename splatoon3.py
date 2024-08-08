@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta, timezone
+from version import ver
 import json
 import os
 import requests
@@ -154,7 +155,7 @@ def get_schedules(locale, target="NOW"):
         target = "NOW"
 
     headers = {
-        'User-Agent': 'DeepCutRadio_Splat00n_ink/1.0.1',
+        'User-Agent': f"DeepCutRadio_Splat00n_ink/{ver()}",
         'From': 'radio@splat00n.ink'  # This is another valid field
     }
     last_schedules_refresh_time = get_last_modified_time(SCHEDULES_DB_FILE)
@@ -397,7 +398,7 @@ def get_schedules(locale, target="NOW"):
     }
 
 if __name__ == '__main__':
-    result = get_schedules("ko-KR")
+    result = get_schedules("ko-KR", "1.0.x-dev")
     print(result["fest"])
     print("============")
     print(result["open"])

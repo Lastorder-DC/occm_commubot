@@ -16,6 +16,7 @@ import schedule
 from pyjosa.josa import Josa
 from dotenv import load_dotenv
 from splatoon3 import get_schedules
+from version import ver
 load_dotenv()
 
 weekday_dict = {
@@ -91,7 +92,7 @@ m = Mastodon(
 )
 bot = m.me()
 
-print(f"성공적으로 계정 {bot.username}으로 로그인 되었습니다.")
+print(f"봇 버전 {ver()} - 성공적으로 계정 {bot.username}으로 로그인 되었습니다.")
 
 def detect_schedule_change():
     global cur_schedule
@@ -505,7 +506,6 @@ def main():
     """
     current_time = datetime.now(timezone('Asia/Seoul'))
     formatted_time = current_time.strftime("%Y년 %m월 %d일") + ' ' + weekday_dict[current_time.weekday()] + ' ' + ampm_dict[current_time.strftime("%p")] + ' ' + current_time.strftime("%I:%M")
-    version = "1.0.2"
 
     toots = m.account_statuses(bot.id)
     new_toot = None
@@ -516,7 +516,7 @@ def main():
             break
         
         if toot.content.find("봇 가동 시작") != -1 and toot.account.id == bot.id:
-            reboot_msg = f"봇 재부팅(v{version}) : {formatted_time}"
+            reboot_msg = f"봇 재부팅(v{ver()}) : {formatted_time}"
             old_content = toot.content
             old_content = old_content.replace("<p>","")
             old_content = old_content.replace("</p>","")
@@ -531,7 +531,7 @@ def main():
             else:
                 new_toot = m.status_update(toot.id, new_content)
     if new_toot is None:
-        new_toot = m.status_post(f"봇 가동 시작(v{version}) : {formatted_time}", visibility=default_visibility)
+        new_toot = m.status_post(f"봇 가동 시작(v{ver()}) : {formatted_time}", visibility=default_visibility)
     try:
         m.stream_user(Listener(), run_async=True, reconnect_async=True, reconnect_async_wait_sec=10)
         while True:

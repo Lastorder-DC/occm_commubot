@@ -3,6 +3,8 @@
 import re
 import os
 from time import sleep
+from datetime import datetime
+import traceback
 import tweepy
 from mastodon import Mastodon
 from mastodon.streaming import StreamListener
@@ -13,6 +15,21 @@ from pyjosa.josa import Josa
 from dotenv import load_dotenv
 from splatoon3 import get_schedules
 load_dotenv()
+
+weekday_dict = {
+    0: '월요일',
+    1: '화요일',
+    2: '수요일',
+    3: '목요일',
+    4: '금요일',
+    5: '토요일',
+    6: '일요일'
+}
+
+ampm_dict = {
+    'AM': '오전',
+    'PM': '오후'
+}
 
 TWITTER_CLIENT_TOKEN=os.getenv('TWITTER_CLIENT_TOKEN')
 TWITTER_CLIENT_KEY=os.getenv('TWITTER_CLIENT_KEY')
@@ -479,12 +496,21 @@ def main():
     메인 함수로, Mastodon 스트리밍을 시작합니다.
     """
     toots = m.account_statuses(bot.id)
-    print(toots[0])
-    return
-    m.stream_user(Listener(), run_async=True, reconnect_async=True, reconnect_async_wait_sec=10)
-    while True:
-        schedule.run_pending()
-        sleep(1)
+    if toots[0].content.find("봇 가동 시작 : ") == -1:
+        current_time = datetime.datetime.now()
+        formatted_time = current_time.strftime("%Y년 %m월 %d일") + ' ' + weekday_dict[current_time.weekday()] + ' ' + ampm_dict[current_time.strftime("%p")] + ' ' + current_time.strftime("%I:%M")
+        m.status_post(f"봇 가동 시작 : {formatted_time}", visibility=default_visibility)
+    try:
+        m.stream_user(Listener(), run_async=True, reconnect_async=True, reconnect_async_wait_sec=10)
+        while True:
+            schedule.run_pending()
+            sleep(1)
+    except Exception:
+        m.status_post(f"@{admin_handle} 오류가 발생했습니다!
+
+{traceback.format_exc()}", visibility='private')
+        print(f"오류 발생! - {traceback.format_exc()}")
+        sleep(10)
 
 if __name__ == '__main__':
     main()

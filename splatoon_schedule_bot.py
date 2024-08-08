@@ -506,6 +506,8 @@ def main():
         reboot_msg = f"봇 재부팅(v1.0.1) : {formatted_time}"
         new_content = f"""{toots[0].content}
 {reboot_msg}"""
+        new_content = new_content.replace("<p>","")
+        new_content = new_content.replace("</p>","")
         if len(new_content) > 2000:
             m.status_post(reboot_msg, visibility=default_visibility)
         else:

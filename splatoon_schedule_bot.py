@@ -524,7 +524,7 @@ def main():
             old_content = old_content.replace("<br/>", "\n")
             old_content = old_content.replace("<br>", "\n")
             new_content = f"""{old_content}
-    {reboot_msg}"""
+{reboot_msg}"""
             
             if len(new_content) > 2000:
                 new_toot = m.status_post(reboot_msg, in_reply_to_id=toot.id, visibility=default_visibility)

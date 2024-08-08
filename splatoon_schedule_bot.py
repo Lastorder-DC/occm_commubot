@@ -374,10 +374,10 @@ class Listener(StreamListener):
                     if cur_schedule["fest"] is None:
                         match_type = ":EtcLogo_Ranked_Battle: 현재 카오폴리스 매치 챌린지"
                     else:
-                        match_type = """페스티벌 진행중!
+                        match_type = f"""페스티벌 진행중!
 :S3F18F: :S3F18U: :S3F18M: {cur_schedule["fest"]["title"]}
 
-:EtcLogo_Splatfest: 현재 페스티벌 매치 (챌린지)"
+:EtcLogo_Splatfest: 현재 페스티벌 매치 (챌린지)"""
                     m.status_post(f"""@{notification['status']['account']['acct']} {match_type}
 {schedules['challenge']['time']['start']} ~ {schedules['challenge']['time']['end']}
 
@@ -400,7 +400,7 @@ class Listener(StreamListener):
                     if cur_schedule["fest"] is None:
                         match_type = ":EtcLogo_Ranked_Battle: 현재 카오폴리스 매치 오픈"
                     else:
-                        match_type = """페스티벌 진행중!
+                        match_type = f"""페스티벌 진행중!
 :S3F18F: :S3F18U: :S3F18M: {cur_schedule["fest"]["title"]}
 
 :EtcLogo_Splatfest: 현재 페스티벌 매치 (오픈)"""

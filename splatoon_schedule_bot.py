@@ -497,7 +497,7 @@ def main():
     """
     toots = m.account_statuses(bot.id)
     if toots[0].content.find("봇 가동 시작 : ") == -1:
-        current_time = datetime.datetime.now()
+        current_time = datetime.now()
         formatted_time = current_time.strftime("%Y년 %m월 %d일") + ' ' + weekday_dict[current_time.weekday()] + ' ' + ampm_dict[current_time.strftime("%p")] + ' ' + current_time.strftime("%I:%M")
         m.status_post(f"봇 가동 시작 : {formatted_time}", visibility=default_visibility)
     try:

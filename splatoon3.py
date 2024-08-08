@@ -154,7 +154,7 @@ def get_schedules(locale, target="NOW"):
         target = "NOW"
 
     headers = {
-        'User-Agent': 'DeepCutRadio_Splat00n_ink/1.1',
+        'User-Agent': 'DeepCutRadio_Splat00n_ink/1.0.1',
         'From': 'radio@splat00n.ink'  # This is another valid field
     }
     last_schedules_refresh_time = get_last_modified_time(SCHEDULES_DB_FILE)

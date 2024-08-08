@@ -502,7 +502,7 @@ def main():
     
     current_time = datetime.now(timezone('Asia/Seoul'))
     formatted_time = current_time.strftime("%Y년 %m월 %d일") + ' ' + weekday_dict[current_time.weekday()] + ' ' + ampm_dict[current_time.strftime("%p")] + ' ' + current_time.strftime("%I:%M")
-    m.status_post(f"봇 가동 시작 : {formatted_time}", visibility=default_visibility)
+    m.status_post(f"봇 가동 시작(v1.0.1) : {formatted_time}", visibility=default_visibility)
     try:
         m.stream_user(Listener(), run_async=True, reconnect_async=True, reconnect_async_wait_sec=10)
         while True:

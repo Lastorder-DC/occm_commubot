@@ -4,6 +4,7 @@ import re
 import os
 from time import sleep
 from datetime import datetime
+from pytz import timezone
 import traceback
 import tweepy
 from mastodon import Mastodon
@@ -496,10 +497,12 @@ def main():
     메인 함수로, Mastodon 스트리밍을 시작합니다.
     """
     toots = m.account_statuses(bot.id)
-    if toots[0].content.find("봇 가동 시작 : ") == -1:
-        current_time = datetime.now()
-        formatted_time = current_time.strftime("%Y년 %m월 %d일") + ' ' + weekday_dict[current_time.weekday()] + ' ' + ampm_dict[current_time.strftime("%p")] + ' ' + current_time.strftime("%I:%M")
-        m.status_post(f"봇 가동 시작 : {formatted_time}", visibility=default_visibility)
+    if toots[0].content.find("봇 가동 시작 : ") != -1:
+        m.status_delete(toots[0].id)
+    
+    current_time = datetime.now(timezone('Asia/Seoul'))
+    formatted_time = current_time.strftime("%Y년 %m월 %d일") + ' ' + weekday_dict[current_time.weekday()] + ' ' + ampm_dict[current_time.strftime("%p")] + ' ' + current_time.strftime("%I:%M")
+    m.status_post(f"봇 가동 시작 : {formatted_time}", visibility=default_visibility)
     try:
         m.stream_user(Listener(), run_async=True, reconnect_async=True, reconnect_async_wait_sec=10)
         while True:

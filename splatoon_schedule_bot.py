@@ -510,7 +510,7 @@ def main():
 
 {traceback.format_exc()}""", visibility='private')
         print(f"""오류 발생!
-{traceback.format_exc()}"""
+{traceback.format_exc()}""")
         sleep(10)
 
 if __name__ == '__main__':

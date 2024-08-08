@@ -4,8 +4,9 @@ import re
 import os
 from time import sleep
 from datetime import datetime
-from pytz import timezone
 import traceback
+
+from pytz import timezone
 import tweepy
 from mastodon import Mastodon
 from mastodon.streaming import StreamListener

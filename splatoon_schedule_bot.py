@@ -87,11 +87,11 @@ def detect_schedule_change():
     if False:
         try:
             client.create_tweet(text=f"""페스티벌 종료!
-리더에 어울리는 건 누구?""")
+배부르게 먹는다면?""")
         except Exception:
             pass
         m.status_post(f"""페스티벌 종료!
-:S3_Splatfest_Icon_Friday: :S3_Splatfest_Icon_Saturday: :S3_Splatfest_Icon_Sunday: 쉬는 날에는?""", visibility=default_visibility)
+:S3F18F: :S3F18U: :S3F18M: 배부르게 먹는다면?""", visibility=default_visibility)
     
     if new_schedule["fest"] is not None and  cur_fest_status != new_schedule["fest"]["state"]:
         old_fest_status = cur_fest_status
@@ -109,22 +109,22 @@ def detect_schedule_change():
 {new_schedule["fest"]["title"]}
 {new_schedule["fest"]["time"]["start"]} ~ {new_schedule["fest"]["time"]["end"]}
 
-:S3_Splatfest_Icon_Friends: 친구와 왁자지껄 :S3_Splatfest_Icon_Family: 가족과 오손도손 :S3_Splatfest_Icon_Solo: 혼자서 유유자적 중 당신의 선택은?""", visibility=default_visibility)
+:S3F18F: 빵 :S3F18U: 밥 :S3F18M: 파스타 중 당신의 선택은?""", visibility=default_visibility)
         elif cur_fest_status == "SECOND_HALF":
             try:
                 client.create_tweet(text=f"""페스티벌 중간 결과 공개!
 {new_schedule["fest"]["title"]}
 {new_schedule["fest"]["time"]["start"]} ~ {new_schedule["fest"]["time"]["end"]}
 
-이번 시즌 트리컬러 배틀 맵은 거미게 경제특구!
+이번 시즌 트리컬러 배틀 맵은 메기 지구!
 트리컬러 배틀로 선택한 팀을 응원하자!""")
             except Exception:
                 pass
             m.status_post(f"""페스티벌 중간 결과 공개!
-:S3_Splatfest_Icon_Friday: :S3_Splatfest_Icon_Saturday: :S3_Splatfest_Icon_Sunday: {new_schedule["fest"]["title"]}
+:S3F18F: :S3F18U: :S3F18M: {new_schedule["fest"]["title"]}
 {new_schedule["fest"]["time"]["start"]} ~ {new_schedule["fest"]["time"]["end"]}
 
-이번 시즌 트리컬러 배틀 맵은 거미게 경제특구!
+이번 시즌 트리컬러 배틀 맵은 메기 지구!
 트리컬러 배틀로 선택한 팀을 응원하자!""", visibility=default_visibility)
 
     if cur_schedule != new_schedule:
@@ -193,7 +193,7 @@ def detect_schedule_change():
 {cur_schedule['regular']['time']['start']} ~ {cur_schedule['regular']['time']['end']}
 
 페스티벌 진행중!
-:S3_Splatfest_Icon_Friday: :S3_Splatfest_Icon_Saturday: :S3_Splatfest_Icon_Sunday: {cur_schedule["fest"]["title"]}
+:S3F18F: :S3F18U: :S3F18M: {cur_schedule["fest"]["title"]}
 {cur_schedule["fest"]["time"]["start"]} ~ {cur_schedule["fest"]["time"]["end"]}
 
 :EtcLogo_Splatfest: 페스티벌 매치 (오픈)

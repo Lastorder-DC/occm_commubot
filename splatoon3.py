@@ -154,7 +154,7 @@ def get_schedules(locale, target="NOW"):
         target = "NOW"
 
     headers = {
-        'User-Agent': 'DeepCutRadio_Splat00n_ink/1.0',
+        'User-Agent': 'DeepCutRadio_Splat00n_ink/1.1',
         'From': 'radio@splat00n.ink'  # This is another valid field
     }
     last_schedules_refresh_time = get_last_modified_time(SCHEDULES_DB_FILE)
@@ -343,10 +343,10 @@ def get_schedules(locale, target="NOW"):
     current_fest = None
     next_fest = None
     if schedules_db["data"]["currentFest"] is not None:
-        if schedules_db["data"]["currentFest"]["id"] == "RmVzdC1VUzpVRUEtMDAwMTM=":
+        if schedules_db["data"]["currentFest"]["id"] == "RmVzdC1BUDpKVUVBLTAwMDE4":
             fest = {
-                "title": locale_db['festivals']['UEA-00013']['title'],
-                "teams": [team['teamName'] for team in locale_db["festivals"]["UEA-00013"]['teams']],
+                "title": locale_db['festivals']['JUEA-00018']['title'],
+                "teams": [team['teamName'] for team in locale_db["festivals"]["JUEA-00018"]['teams']],
                 "state": schedules_db["data"]["currentFest"]["state"],
                 "time": {
                     "start": convert_time_to_readable(schedules_db["data"]["currentFest"]["startTime"]),

@@ -478,6 +478,8 @@ def main():
     """
     메인 함수로, Mastodon 스트리밍을 시작합니다.
     """
+    print(m.me())
+    return
     m.stream_user(Listener(), run_async=True, reconnect_async=True, reconnect_async_wait_sec=10)
     while True:
         schedule.run_pending()

@@ -403,7 +403,7 @@ class Listener(StreamListener):
                         match_type = """페스티벌 진행중!
 :S3F18F: :S3F18U: :S3F18M: {cur_schedule["fest"]["title"]}
 
-:EtcLogo_Splatfest: 현재 페스티벌 매치 (오픈)"
+:EtcLogo_Splatfest: 현재 페스티벌 매치 (오픈)"""
                     m.status_post(f"""@{notification['status']['account']['acct']} {match_type}
 {schedules['open']['time']['start']} ~ {schedules['open']['time']['end']}
 

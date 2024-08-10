@@ -147,7 +147,7 @@ def detect_schedule_change():
 이번 시즌 트리컬러 배틀 맵은 메기 지구!
 트리컬러 배틀로 선택한 팀을 응원하자!""", visibility=default_visibility)
 
-    if cur_schedule != new_schedule:
+    if True:
         cur_schedule = new_schedule
 
         # 페스티벌 미진행시

@@ -74,12 +74,13 @@ default_visibility = os.getenv('MASTODON_DEFAULT_VISIBILITY')
 admin_handle = os.getenv('BOT_ADMIN_HANDLE')
 tag_admin = os.getenv('BOT_TAG_ADMIN') == 'true'
 locale = os.getenv('BOT_LOCALE')
-cur_schedule = None
+cur_schedule = get_schedules(locale)
 cur_salmon = cur_schedule["salmon"]
 cur_event = None
 next_event = None
 cur_fest = cur_schedule["fest"]
 cur_fest_id = ""
+cur_schedule = None
 try:
     with open('fest.db', 'rb') as fr:
         fest_status = pickle.load(fr)

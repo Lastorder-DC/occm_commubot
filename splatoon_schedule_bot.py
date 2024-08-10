@@ -212,12 +212,11 @@ def detect_schedule_change():
 규칙 : {cur_schedule['xmatch']['rule']}""", visibility=default_visibility)
         else:
             try:
-                updatetwt_1 = client.create_tweet(text=f"""스케쥴이 업데이트되었습니다.
-{cur_schedule['regular']['time']['start']} ~ {cur_schedule['regular']['time']['end']}
+                updatetwt_1 = client.create_tweet(text=f"""{cur_schedule["fest"]["title"]}
+{cur_schedule["fest"]["time"]["start"]} ~ {cur_schedule["fest"]["time"]["end"]}
 
-페스티벌 진행중!
-{cur_schedule["fest"]["title"]}
-{cur_schedule["fest"]["time"]["start"]} ~ {cur_schedule["fest"]["time"]["end"]}""")
+스케쥴이 업데이트되었습니다.
+{cur_schedule['regular']['time']['start']} ~ {cur_schedule['regular']['time']['end']}""")
                 client.create_tweet(text=f"""페스티벌 매치 (오픈)
 맵 : {', '.join(cur_schedule['open']['stages'])}
 규칙 : {cur_schedule['open']['rule']}
@@ -228,12 +227,11 @@ def detect_schedule_change():
             except Exception as e:
                 print(e)
                 pass
-            m.status_post(f"""스케쥴이 업데이트되었습니다.
-{cur_schedule['regular']['time']['start']} ~ {cur_schedule['regular']['time']['end']}
-
-페스티벌 진행중!
-:S3F18F: :S3F18U: :S3F18M: {cur_schedule["fest"]["title"]}
+            m.status_post(f""":S3F18F: :S3F18U: :S3F18M: {cur_schedule["fest"]["title"]}
 {cur_schedule["fest"]["time"]["start"]} ~ {cur_schedule["fest"]["time"]["end"]}
+
+스케쥴이 업데이트되었습니다.
+{cur_schedule['regular']['time']['start']} ~ {cur_schedule['regular']['time']['end']}
 
 :EtcLogo_Splatfest: 페스티벌 매치 (오픈)
 맵 : {', '.join(cur_schedule['open']['stages'])}

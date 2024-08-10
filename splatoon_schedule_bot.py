@@ -136,36 +136,36 @@ def detect_schedule_change():
             if cur_fest_status == "FIRST_HALF":
                 try:
                     client.create_tweet(text=f"""페스티벌이 시작되었다!
-    {new_schedule["fest"]["title"]}
-    {new_schedule["fest"]["time"]["start"]} ~ {new_schedule["fest"]["time"]["end"]}
+{new_schedule["fest"]["title"]}
+{new_schedule["fest"]["time"]["start"]} ~ {new_schedule["fest"]["time"]["end"]}
 
-    {', '.join(new_schedule["fest"]["teams"])} 중 당신의 선택은?""")
+{', '.join(new_schedule["fest"]["teams"])} 중 당신의 선택은?""")
                 except Exception:
                     pass
                 m.status_post(f"""페스티벌이 시작되었다!
-    {new_schedule["fest"]["title"]}
-    {new_schedule["fest"]["time"]["start"]} ~ {new_schedule["fest"]["time"]["end"]}
+{new_schedule["fest"]["title"]}
+{new_schedule["fest"]["time"]["start"]} ~ {new_schedule["fest"]["time"]["end"]}
 
-    :S3F18F: 빵 :S3F18U: 밥 :S3F18M: 파스타 중 당신의 선택은?""", visibility=default_visibility)
+:S3F18F: 빵 :S3F18U: 밥 :S3F18M: 파스타 중 당신의 선택은?""", visibility=default_visibility)
             elif cur_fest_status == "SECOND_HALF":
                 try:
                     client.create_tweet(text=f"""페스티벌 중간 결과 공개!
-    {new_schedule["fest"]["title"]}
-    {new_schedule["fest"]["time"]["start"]} ~ {new_schedule["fest"]["time"]["end"]}
+{new_schedule["fest"]["title"]}
+{new_schedule["fest"]["time"]["start"]} ~ {new_schedule["fest"]["time"]["end"]}
 
-    이번 시즌 트리컬러 배틀 맵은 메기 지구!
-    트리컬러 배틀로 선택한 팀을 응원하자!""")
+이번 시즌 트리컬러 배틀 맵은 메기 지구!
+트리컬러 배틀로 선택한 팀을 응원하자!""")
                 except Exception:
                     pass
                 m.status_post(f"""페스티벌 중간 결과 공개!
-    :S3F18F: :S3F18U: :S3F18M: {new_schedule["fest"]["title"]}
-    {new_schedule["fest"]["time"]["start"]} ~ {new_schedule["fest"]["time"]["end"]}
+:S3F18F: :S3F18U: :S3F18M: {new_schedule["fest"]["title"]}
+{new_schedule["fest"]["time"]["start"]} ~ {new_schedule["fest"]["time"]["end"]}
 
-    이번 시즌 트리컬러 배틀 맵은 메기 지구!
-    트리컬러 배틀로 선택한 팀을 응원하자!""", visibility=default_visibility)
+이번 시즌 트리컬러 배틀 맵은 메기 지구!
+트리컬러 배틀로 선택한 팀을 응원하자!""", visibility=default_visibility)
 
     with open('fest.db','wb') as fw:
-        pickle.dump(fest, fw)
+        pickle.dump(fest_status, fw)
     
     if cur_schedule != new_schedule:
         cur_schedule = new_schedule

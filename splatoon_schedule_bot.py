@@ -80,6 +80,7 @@ cur_event = None
 next_event = None
 cur_fest = cur_schedule["fest"]
 cur_fest_id = ""
+cur_fest_status = ""
 cur_schedule = None
 try:
     with open('fest.db', 'rb') as fr:
@@ -108,6 +109,7 @@ def detect_schedule_change():
     global next_event
     global cur_fest
     global cur_fest_status
+    global cur_fest_id
     new_schedule = get_schedules(locale)
 
     if new_schedule["fest"] is None and fest_status[fest_status.keys()[-1]] != "ENDED":
@@ -122,7 +124,6 @@ def detect_schedule_change():
 :S3F18F: :S3F18U: :S3F18M: 배부르게 먹는다면?""", visibility=default_visibility)
     
     if new_schedule["fest"] is not None:
-        old_fest_status = cur_fest_status
         cur_fest_status = new_schedule["fest"]["state"]
         cur_fest_id = new_schedule["fest"]["id"]
 

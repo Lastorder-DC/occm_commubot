@@ -1,2 +1,2 @@
 def ver():
-    return "1.0.4"
+    return "1.0.5"

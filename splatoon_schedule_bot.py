@@ -73,7 +73,7 @@ default_visibility = os.getenv('MASTODON_DEFAULT_VISIBILITY')
 admin_handle = os.getenv('BOT_ADMIN_HANDLE')
 tag_admin = os.getenv('BOT_TAG_ADMIN') == 'true'
 locale = os.getenv('BOT_LOCALE')
-cur_schedule = get_schedules(locale)
+cur_schedule = None
 cur_salmon = cur_schedule["salmon"]
 cur_event = None
 next_event = None
@@ -147,7 +147,7 @@ def detect_schedule_change():
 이번 시즌 트리컬러 배틀 맵은 메기 지구!
 트리컬러 배틀로 선택한 팀을 응원하자!""", visibility=default_visibility)
 
-    if True:
+    if cur_schedule != new_schedule:
         cur_schedule = new_schedule
 
         # 페스티벌 미진행시

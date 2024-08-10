@@ -344,7 +344,7 @@ def get_schedules(locale, target="NOW"):
     current_fest = None
     next_fest = None
     if schedules_db["data"]["currentFest"] is not None:
-        if schedules_db["data"]["currentFest"]["id"] == "RmVzdC1BUDpKVUVBLTAwMDE4":
+        if schedules_db["data"]["currentFest"]["id"] == "RmVzdC1VUzpKVUVBLTAwMDE4":
             fest = {
                 "title": locale_db['festivals']['JUEA-00018']['title'],
                 "teams": [team['teamName'] for team in locale_db["festivals"]["JUEA-00018"]['teams']],
@@ -398,7 +398,7 @@ def get_schedules(locale, target="NOW"):
     }
 
 if __name__ == '__main__':
-    result = get_schedules("ko-KR", "1.0.x-dev")
+    result = get_schedules("ko-KR")
     print(result["fest"])
     print("============")
     print(result["open"])

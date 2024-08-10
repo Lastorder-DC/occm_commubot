@@ -81,7 +81,6 @@ next_event = None
 cur_fest = cur_schedule["fest"]
 cur_fest_id = ""
 cur_fest_status = ""
-cur_schedule = None
 try:
     with open('fest.db', 'rb') as fr:
         fest_status = pickle.load(fr)

@@ -41,7 +41,7 @@ def convert_time_to_readable(timestr):
     input_datetime = input_datetime.replace(tzinfo=timezone.utc).astimezone(gmt9_timezone)
     
     # 변경된 datetime 객체를 원하는 형식의 문자열로 변환
-    output_string = input_datetime.strftime("%Y년 %m월 %d일 %p %I시")
+    output_string = input_datetime.strftime("%m월 %d일 %p %I시")
     output_string = output_string.replace("AM", "오전")
     output_string = output_string.replace("PM", "오후")
     

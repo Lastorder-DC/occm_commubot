@@ -111,7 +111,10 @@ def detect_schedule_change():
     global cur_fest_id
     new_schedule = get_schedules(locale)
 
-    if new_schedule["fest"] is None and fest_status[fest_status.keys()[-1]] != "ENDED":
+    last_fest_id = list(fest_status.keys())[-1]
+    last_fest_status = fest_status[last_key]
+
+    if new_schedule["fest"] is None and last_fest_status != "ENDED":
         fest_status[fest_status.keys()[-1]] = "ENDED"
 
         try:

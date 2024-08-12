@@ -81,6 +81,9 @@ next_event = None
 cur_fest = cur_schedule["fest"]
 cur_fest_id = ""
 cur_fest_status = ""
+
+cur_schedule = None
+
 try:
     with open('fest.db', 'rb') as fr:
         fest_status = pickle.load(fr)
@@ -112,7 +115,7 @@ def detect_schedule_change():
     new_schedule = get_schedules(locale)
 
     last_fest_id = list(fest_status.keys())[-1]
-    last_fest_status = fest_status[last_key]
+    last_fest_status = fest_status[last_fest_id]
 
     if new_schedule["fest"] is None and last_fest_status != "ENDED":
         fest_status[fest_status.keys()[-1]] = "ENDED"

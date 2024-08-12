@@ -118,7 +118,7 @@ def detect_schedule_change():
     last_fest_status = fest_status[last_fest_id]
 
     if new_schedule["fest"] is None and last_fest_status != "ENDED":
-        fest_status[fest_status.keys()[-1]] = "ENDED"
+        fest_status[last_fest_id] = "ENDED"
 
         try:
             client.create_tweet(text=f"""페스티벌 종료!

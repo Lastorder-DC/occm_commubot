@@ -297,8 +297,8 @@ def detect_schedule_change():
 
 schedule.every(10).seconds.do(detect_schedule_change)
 
-CLEANR = re.compile('<.*?>')
-SEC_CLEANR = re.compile('\B@\w+')
+CLEANR = re.compile(r'<.*?>')
+SEC_CLEANR = re.compile(r'\B@\w+')
 
 def gettext(raw_html):
     """
@@ -570,3 +570,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+

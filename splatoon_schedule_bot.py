@@ -122,11 +122,11 @@ def detect_schedule_change():
 
         try:
             client.create_tweet(text=f"""페스티벌 종료!
-배부르게 먹는다면?""")
+친구가 된다면?""")
         except Exception:
             pass
         m.status_post(f"""페스티벌 종료!
-:S3F18F: :S3F18U: :S3F18M: 배부르게 먹는다면?""", visibility=default_visibility)
+:S3F10F: :S3F10U: :S3F10M: 친구가 된다면?""", visibility=default_visibility)
     
     if new_schedule["fest"] is not None:
         cur_fest_status = new_schedule["fest"]["state"]
@@ -151,22 +151,22 @@ def detect_schedule_change():
 {new_schedule["fest"]["title"]}
 {new_schedule["fest"]["time"]["start"]} ~ {new_schedule["fest"]["time"]["end"]}
 
-:S3F18F: 빵 :S3F18U: 밥 :S3F18M: 파스타 중 당신의 선택은?""", visibility=default_visibility)
+:S3F10F: 좀비 :S3F10U: 해골 :S3F10M: 유령 중 당신의 선택은?""", visibility=default_visibility)
             elif cur_fest_status == "SECOND_HALF":
                 try:
                     client.create_tweet(text=f"""페스티벌 중간 결과 공개!
 {new_schedule["fest"]["title"]}
 {new_schedule["fest"]["time"]["start"]} ~ {new_schedule["fest"]["time"]["end"]}
 
-이번 시즌 트리컬러 배틀 맵은 메기 지구!
+이번 시즌 트리컬러 배틀 맵은 과메기 온천!
 트리컬러 배틀로 선택한 팀을 응원하자!""")
                 except Exception:
                     pass
                 m.status_post(f"""페스티벌 중간 결과 공개!
-:S3F18F: :S3F18U: :S3F18M: {new_schedule["fest"]["title"]}
+:S3F10F: :S3F10U: :S3F10M: {new_schedule["fest"]["title"]}
 {new_schedule["fest"]["time"]["start"]} ~ {new_schedule["fest"]["time"]["end"]}
 
-이번 시즌 트리컬러 배틀 맵은 메기 지구!
+이번 시즌 트리컬러 배틀 맵은 과메기 온천!
 트리컬러 배틀로 선택한 팀을 응원하자!""", visibility=default_visibility)
 
     with open('fest.db','wb') as fw:
@@ -233,7 +233,7 @@ def detect_schedule_change():
             except Exception as e:
                 print(e)
                 pass
-            m.status_post(f""":S3F18F: :S3F18U: :S3F18M: {cur_schedule["fest"]["title"]}
+            m.status_post(f""":S3F10F: :S3F10U: :S3F10M: {cur_schedule["fest"]["title"]}
 {cur_schedule["fest"]["time"]["start"]} ~ {cur_schedule["fest"]["time"]["end"]}
 
 스케쥴이 업데이트되었습니다.
@@ -371,7 +371,7 @@ class Listener(StreamListener):
                 if result[0] == "%영배%":
                     if cur_schedule["fest"] is not None:
                         m.status_post(f"""@{notification['status']['account']['acct']} 페스티벌 진행중!
-:S3F18F: :S3F18U: :S3F18M: {cur_schedule["fest"]["title"]}
+:S3F10F: :S3F10U: :S3F10M: {cur_schedule["fest"]["title"]}
 
 페스티벌 매치나 트리컬러 매치로 좋아하는 팀을 응원해보자!""", in_reply_to_id=notification['status']['id'], visibility=default_visibility)
                     else:
@@ -399,7 +399,7 @@ class Listener(StreamListener):
                         match_type = ":EtcLogo_Ranked_Battle: 현재 카오폴리스 매치 챌린지"
                     else:
                         match_type = f"""페스티벌 진행중!
-:S3F18F: :S3F18U: :S3F18M: {cur_schedule["fest"]["title"]}
+:S3F10F: :S3F10U: :S3F10M: {cur_schedule["fest"]["title"]}
 
 :EtcLogo_Splatfest: 현재 페스티벌 매치 (챌린지)"""
                     m.status_post(f"""@{notification['status']['account']['acct']} {match_type}
@@ -425,7 +425,7 @@ class Listener(StreamListener):
                         match_type = ":EtcLogo_Ranked_Battle: 현재 카오폴리스 매치 오픈"
                     else:
                         match_type = f"""페스티벌 진행중!
-:S3F18F: :S3F18U: :S3F18M: {cur_schedule["fest"]["title"]}
+:S3F10F: :S3F10U: :S3F10M: {cur_schedule["fest"]["title"]}
 
 :EtcLogo_Splatfest: 현재 페스티벌 매치 (오픈)"""
                     m.status_post(f"""@{notification['status']['account']['acct']} {match_type}
@@ -450,7 +450,7 @@ class Listener(StreamListener):
                 elif result[0] == "%엑스%":
                     if cur_schedule["fest"] is not None:
                         m.status_post(f"""@{notification['status']['account']['acct']} 페스티벌 진행중!
-:S3F18F: :S3F18U: :S3F18M: {cur_schedule["fest"]["title"]}
+:S3F10F: :S3F10U: :S3F10M: {cur_schedule["fest"]["title"]}
 
 페스티벌 매치나 트리컬러 매치로 좋아하는 팀을 응원해보자!""", in_reply_to_id=notification['status']['id'], visibility=default_visibility)
                     else:
